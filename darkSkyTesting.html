@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<title>Dark Sky API Testing</title>
+
+</head>
+
+<body>
+
+	<h1>Find the weather in a city</h1>
+
+	<h4>Latitude</h4>
+	<input type="text" id="latitude">
+
+	<h4>Longitutde</h4>
+	<input type="text" id="longitude">
+
+	<button id="submitBtn">Sumbit</button>
+
+	<div id="weatherInfo">
+
+		<p id="icon"></p>
+
+		<p id="summary"></p>
+
+		<p id="highTemp"></p>
+
+		<p id="lowTemp"></p>
+
+	</div>
+
+	<script>
+
+		function findWeather() {
+
+			var queryURL = "https://api.darksky.net/forecast/7c1ee8ce08e3d4210e427e13b9b51926/30.287144,-97.728885"
+
+			$.ajax({
+				url: queryURL,
+				method: "GET"
+			}).then(function(response){
+
+				console.log(response);
+
+				$("#icon").text(response.daily.icon);
+				$("#summary").text(response.daily.summary);
+				$("#highTemp").text("High: " + response.daily.temperatureHigh);
+				$("#lowTemp").text("Low: " + response.daily.temperatureLow);
+
+			});
+
+		};
+
+		$("#submitBtn").on("click", function(e) {
+
+			e.preventDefault();
+
+			findWeather();
+
+		})
+
+	</script>
+
+</body>
+
+</html>
