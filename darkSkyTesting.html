@@ -12,7 +12,7 @@
 
 <body>
 
-	<h1>Find the weather in a city</h1>
+	<h1>Find weather</h1>
 
 	<h4>Latitude</h4>
 	<input type="text" id="latitude">
@@ -24,21 +24,39 @@
 
 	<div id="weatherInfo">
 
-		<p id="icon"></p>
-
 		<p id="summary"></p>
 
-		<p id="highTemp"></p>
+		<h5>Today</h5>
+		<p id="highTemp0"></p>
 
-		<p id="lowTemp"></p>
+		<p id="lowTemp0"></p>
+
+		<br>
+
+		<h5>Tomorrow</h5>
+		<p id="highTemp1"></p>
+
+		<p id="lowTemp1"></p>
+
+		<br>
+
+		<h5>The next day</h5>
+		<p id="highTemp2"></p>
+
+		<p id="lowTemp2"></p>
 
 	</div>
 
 	<script>
 
+		var latitude;
+		var longitude;
+
 		function findWeather() {
 
-			var queryURL = "https://api.darksky.net/forecast/7c1ee8ce08e3d4210e427e13b9b51926/30.287144,-97.728885"
+			var queryURL = "https://api.darksky.net/forecast/7c1ee8ce08e3d4210e427e13b9b51926/" + latitude + "," + longitude;
+
+			console.log(queryURL);
 
 			$.ajax({
 				url: queryURL,
@@ -49,8 +67,12 @@
 
 				$("#icon").text(response.daily.icon);
 				$("#summary").text(response.daily.summary);
-				$("#highTemp").text("High: " + response.daily.temperatureHigh);
-				$("#lowTemp").text("Low: " + response.daily.temperatureLow);
+				$("#highTemp0").text("High: " + response.daily.data[0].temperatureHigh);
+				$("#lowTemp0").text("Low: " + response.daily.data[0].temperatureLow);
+				$("#highTemp1").text("High: " + response.daily.data[1].temperatureHigh);
+				$("#lowTemp1").text("Low: " + response.daily.data[1].temperatureLow);
+				$("#highTemp2").text("High: " + response.daily.data[2].temperatureHigh);
+				$("#lowTemp2").text("Low: " + response.daily.data[2].temperatureLow);
 
 			});
 
@@ -59,6 +81,11 @@
 		$("#submitBtn").on("click", function(e) {
 
 			e.preventDefault();
+
+			latitude = $("#latitude").val().trim();
+			console.log(latitude);
+			longitude = $("#longitude").val().trim();
+			console.log(longitude);
 
 			findWeather();
 
