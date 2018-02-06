@@ -1,8 +1,9 @@
 API keys
 
-Flickr: 9c281d697f2117035677959f519e4eac
+Getty: xsgquqcuuecs9hdae5j442xr
 
 Amadeus: iD5zJSk96ckruurDP9FraQIVA5ROplcG
 
 Dark Sky: 7c1ee8ce08e3d4210e427e13b9b51926
 
+Flickr: 9c281d697f2117035677959f519e4eac
