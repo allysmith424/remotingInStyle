@@ -1,0 +1,105 @@
+body{
+	background-image: url('GG_Bridge.jpg');
+}
+
+header{
+	background-color: white;
+	opacity: .8;
+	margin-right: 40vw;
+}
+
+h1{
+	background-color: white;
+	opacity: .8;
+	padding-top: 2vh;
+	padding-bottom: 2vh;
+	margin-left: 5vw;
+}
+
+h2{
+	padding-top: 1vh;
+	padding-bottom: 1vh;
+	font-size: 20px;
+	text-align: center;
+}
+
+h3{
+	text-align: center;
+}
+
+.top-row{
+	margin-top: 4vh;
+	height: 75vh;
+	margin-bottom: 6vh;
+	border: 1px solid black;
+}
+
+.bottom-row{
+	height: 15vh;
+}
+
+.has-text{
+	color: black;
+	text-align: center;
+}
+
+.info{
+	background-color: orange;
+	opacity: .8;
+}
+
+#weather-image{
+	width: 4vw;
+	height: auto;
+	float: left;
+	margin-top: .5vh;
+}
+
+#forecast{
+	background-color: rgba(255, 0, 0, 0.4);
+}
+
+#weather-stats {
+	background-color: white;
+	opacity: 0.75;
+}
+
+.weather-day {
+	border-bottom: 0.5px solid #777;
+	height: 50px;
+}
+
+.day-and-date {
+	font-size: 10px;
+	position: relative;
+	float: left;
+	top: 5%;
+	left: 8%;
+}
+
+.date {
+	color: #777;
+	font-size: 8px;
+}
+
+.daily-weather-image {
+	padding: 0 20px;
+}
+
+.temperatures {
+	font-size: 10px;
+	position: relative;
+	float: right;
+	top: 10%;
+	right: 8%;
+}
+
+.temp-low {
+	color: #777;
+}
+
+.main-content{
+	background-color: yellow;
+	opacity: .4;
+	height: 58vh;
+}

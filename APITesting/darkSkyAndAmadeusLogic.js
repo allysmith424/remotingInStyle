@@ -179,7 +179,7 @@ function addToPage() {
 
 function hotelQuery(latitude, longitude) {
 
-	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + latitude + "&longitude=" + longitude + "&radius=50&check_in=2018-02-10&check_out=2018-02-11&number_of_results=5";
+	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + latitude + "&longitude=" + longitude + "&radius=20&check_in=2018-02-10&check_out=2018-02-11&number_of_results=5";
 
 	console.log(queryURL);
 
@@ -204,23 +204,17 @@ $("#submitBtn").on("click", function(e) {
 
 	desiredWeather = $("#weatherType").val().trim();
 
-	$("#cityList").empty();
-
 	matchWeatherType();
 
-	var addToPageTimeout = setTimeout(function() {
+	$(document).ajaxStop(function() {
+
+		$("#cityList").empty();
+		$("#hotelList").empty();
 		addToPage();
-	}, 0.5 * 1000);	
+
+	});
 
 });
-
-// $("#addToPageBtn").on("click", function(e) {
-
-// 	e.preventDefault();
-
-// 	addToPage();
-
-// });
 
 $(document).on("click", ".city", function() {
 

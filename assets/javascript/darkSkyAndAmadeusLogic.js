@@ -179,7 +179,7 @@ function addToPage() {
 
 function hotelQuery(latitude, longitude) {
 
-	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + latitude + "&longitude=" + longitude + "&radius=50&check_in=2018-02-10&check_out=2018-02-11&number_of_results=5";
+	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + latitude + "&longitude=" + longitude + "&radius=10&check_in=2018-02-10&check_out=2018-02-11&number_of_results=5";
 
 	console.log(queryURL);
 
@@ -228,13 +228,13 @@ $(document).on("click", ".city", function() {
 
 });
 
-
 // //heroku workaround for Cors
 // var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 // var targetUrl = queryURL;
 // $.get(proxyUrl + targetUrl, function(data) {
 //     console.log(data);
 // });
+
 // // CORS workaround for when you run multiple servers (like node and React), and are getting a CORS error:
 // //For use when you have control over both servers
 // $.ajax({
