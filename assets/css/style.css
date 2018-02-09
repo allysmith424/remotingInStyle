@@ -1,0 +1,194 @@
+body{
+	background: url(assets/images/computer_background.jpg);
+	background-size: cover;
+}
+
+.has-text{
+	color: blue;
+	text-align: center;
+	margin-top: 80px;
+	font-size: 3rem;
+	font-weight: 800;
+}
+
+.review-button{
+	background-color: red;
+	height: 8vh;
+}
+
+.middle-row {
+/*	background: black;*/
+	height: 35vh;
+}
+
+#button {
+	margin: 10px;
+}
+
+.formatted {
+	height: 50vh;
+	margin: 100px;
+}
+
+.title-screen {
+	background: black;
+	width: 900px;
+	height: 500px;
+	margin-left: 200px;
+}
+
+.button-screen {
+	margin-left: 180px;
+}
+
+.review-form {
+	margin-left: 420px;
+	margin-top: 150px;
+}
+
+.review-line {
+	margin-left: -40px;
+	margin-bottom: 15px;
+	color: gold;
+	font-size: 1.3rem;
+	font-weight: 800;
+	font-family: 'Shrikhand', cursive;
+	text-shadow: 2px 2px black;
+}
+
+.display-none {
+	display: none;
+}
+/*==================TITLE BELOW=======================*/
+
+.text-container h1 {
+	font-family: 'Shrikhand', cursive;
+	font-size: 85px;
+	color: rgba(225,225,225,.1);
+	background-image: url(assets/images/landscape.jpg);
+	background-repeat: repeat-x;
+	-webkit-background-clip: text;
+	animation: backscroll 20s linear infinite;
+}
+
+@keyframes backscroll {
+	0% { background-position: left 50px top 0px; }
+	50% { background-position: left 200px top 0px; }
+	100% { background-position: left 50px top 0px; }
+}
+
+.text-container {
+	padding-top: 200px;
+	text-align: center;
+	height: 100px;
+}
+
+.subtitle {
+	margin-top: 20px;
+	font-size: 1.2rem;
+	font-family: 'Shrikhand', cursive;
+	color: darkgrey;
+	text-align: center;
+}
+
+
+/*=================PICK WEATHER SCREEN======================*/
+
+.weather {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 10px;
+	font-size: 1.6rem;
+	font-weight: 800px;
+	color: cyan;
+	text-align: center;
+}
+
+.snowy {
+	background-image: url(assets/images/icon_snowy_70.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 256px;
+	margin: 10px;
+}
+
+.overcast {
+	background-image: url(assets/images/icon_overcast_70.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 256px;
+	margin: 10px;
+}
+
+.sunny {
+	background-image: url(assets/images/icon_sunny_70.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 256px;
+	margin: 10px;
+}
+
+.rainy {
+	background-image: url(assets/images/icon_rainy_70.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 256px;
+	margin: 10px;
+}
+
+.breaker {
+	border: 2px solid white;
+	margin: 30px 300px 0px 300px;
+}
+
+.line {
+	margin: 30px;
+	font-size: 2.3rem;
+	color: #42f465;
+	text-align: center;
+}
+
+.next {
+	background: blue;
+	height: 100px;
+}
+
+.button-row {
+	height: 52vh;
+	margin-left: 50px;
+	margin-top: 10px;
+}
+
+.select {
+	padding: 10px;
+	font-size: 1.6rem;
+	font-weight: 800px;
+	color: lime;
+	text-align: center;
+}
+
+.pure-button {
+	border-radius: 10px;
+	width: 10vw;
+}
+
+.pure-button:hover {
+	background: lightgreen;
+	color: darkgreen;
+	font-size: 16px;
+	font-weight: 700;
+	border-radius: 10px;
+	text-shadow: 1px 1px white;
+	box-shadow: 4px 4px black;
+}
+
+.form-layout {
+	background: black;
+	font-size: 24px;
+}
+
+.destination-form {
+	background: red;
+	font-size: 26px;
+	text-align: center;
+}
