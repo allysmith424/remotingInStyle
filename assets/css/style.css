@@ -181,3 +181,8 @@ body{
 	text-shadow: 1px 1px white;
 	box-shadow: 4px 4px black;
 }
+
+.form-layout {
+	background: black;
+	font-size: 24px;
+}
