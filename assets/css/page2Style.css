@@ -10,6 +10,7 @@ body{
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
+	background-image: url("../images/GG_Bridge.jpg");
 }
 
 header{
@@ -84,9 +85,13 @@ input{
 	left: 8%;
 }
 
+.day {
+	font-weight: bold;
+}
+
 .date {
 	color: #777;
-	font-size: 8px;
+	font-size: 9px;
 }
 
 .daily-weather-image {
@@ -272,4 +277,43 @@ input{
     100% {
         opacity: 0;
     }
+}
+
+#hotel-div {
+	background-color: rgba(255, 255, 255, 0.6);
+	height: 300px;
+	position: relative;
+}
+
+.hotel-image {
+	height: 100px;
+	position: absolute;
+	top: 30%;
+	left: 10%;
+}
+
+.hotel-info {
+	position: absolute;
+	top: 15%;
+	left: 35%;
+}
+
+h4 {
+	font-size: 30px;
+	margin-bottom: 0;
+}
+
+.hotel-website {
+	color: #777;
+}
+
+.next-btn {
+	position: absolute;
+	background-color: red;
+	top: 80%;
+	left: 80%;
+	padding: 10px 20px;
+	border-radius: 15%;
+	color: #fff;
+	letter-spacing: 3px;
 }
