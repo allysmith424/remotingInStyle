@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Remoting in Style</title>
+	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+</head>
+<body class="formatted">
+
+<!-- ============== TITLE SCREEN HERE ============== -->
+
+<div class="title-screen">
+	<div class="text-container">
+		<h1>Remoting in Style</h1>
+	</div>
+	<div class="subtitle">Click screen to continue</div>
+</div>
+
+<!-- ============== WEATHER SELECT SCREEN HERE ============== -->
+
+	<div class="weather-screen display-none">
+		<div class="pure-g middle-row">
+			<div class="pure-u-24-24">
+				<div class= "pure-u-5-24 empty">SPACE 1</div>
+				<div class= "pure-u-3-24 weather-icon snowy"></div>
+				<div class= "pure-u-3-24 weather-icon sunny"></div>
+				<div class= "pure-u-3-24 weather-icon overcast"></div>
+				<div class= "pure-u-3-24 weather-icon rainy"></div>
+			</div>
+			<div class="pure-u-24-24">
+				<div class="pure-u-8-24"></div>
+				<div class="pure-u-8-24 weather">Select a ideal weather condition</div>
+				<div class="pure-u-8-24"></div>
+			</div>
+		</div>
+		<hr class="breaker">
+		<div class="line">YOU HAVE SELECTED SUNNY!</div>
+	</div>
+
+<!-- ============== CITY SELECT SCREEN HERE ============== -->
+
+
+	<div class="pure-g button-screen display-none">
+		<div class= "pure-u-18-24 button-row">
+			<div class= "pure-u-14-24 select">Pick your destination!</div>
+			<div class="city-button">
+					<a class="pure-button" id="button" href="#">San Francisco</a>
+					<a class="pure-button" id="button" href="#">New York City</a>
+					<a class="pure-button" id="button" href="#">Honolulu</a>
+					<a class="pure-button" id="button" href="#">Athens</a>
+					<a class="pure-button" id="button" href="#">Chicago</a>
+					<a class="pure-button" id="button" href="#">Orlando</a>
+					<a class="pure-button" id="button" href="#">Taipei</a>
+					<a class="pure-button" id="button" href="#">Oslo</a>
+					<a class="pure-button" id="button" href="#">Seoul</a>
+					<a class="pure-button" id="button" href="#">Verdun</a>
+					<a class="pure-button" id="button" href="#">Berlin</a>
+					<a class="pure-button" id="button" href="#">Cairo</a>
+					<a class="pure-button" id="button" href="#">Istanbul</a>
+					<a class="pure-button" id="button" href="#">Nairobi</a>
+					<a class="pure-button" id="button" href="#">San Juan</a>
+					<a class="pure-button" id="button" href="#">Houston</a>
+					<a class="pure-button" id="button" href="#">Pyongyang</a>
+					<a class="pure-button" id="button" href="#">Stockholm</a>
+					<a class="pure-button" id="button" href="#">Beijing</a>
+					<a class="pure-button" id="button" href="#">Rome</a>
+					<a class="pure-button" id="button" href="#">Syndey</a>
+					<a class="pure-button" id="button" href="#">Moscow</a>
+					<a class="pure-button" id="button" href="#">St. Petersburg</a>
+					<a class="pure-button" id="button" href="#">Bogota</a>
+			</div>
+		</div>
+	</div>
+
+	<form class="pure-form review-form display-none">
+		<div class="review-line">Review Your Experience using Remoting in Style</div>
+	    <fieldset class="pure-group">
+	        <input type="text" class="pure-input-1-2" placeholder="Name">
+	        <input type="date" class="pure-input-1-2" placeholder="Travel Start Date">
+	        <input type="date" class="pure-input-1-2" placeholder="Travel End Date">
+	        <input type="text" class="pure-input-1-2" placeholder="City Visited">
+	        <input type="text" class="pure-input-1-2" placeholder="Events Visited">
+	    </fieldset>
+
+	    <fieldset class="pure-group">
+	        <textarea class="pure-input-1-2" placeholder="leave additional comments here.."></textarea>
+	    </fieldset>
+
+	    <button type="submit" class="pure-button pure-input-1-2 pure-button-primary">Submit Review</button>
+	</form>
+</body>
