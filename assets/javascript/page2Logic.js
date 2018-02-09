@@ -233,6 +233,7 @@ function convertToEventfulDateFormat(dateString){
 	return year + month + day + "00";
 }
 
+// finds 5 hotels within 40km of city
 function loadHotels(latitude, longitude) {
 
 	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + latitude + "&longitude=" + longitude + "&radius=40&check_in=2018-02-10&check_out=2018-02-11&number_of_results=5";
@@ -255,7 +256,7 @@ function loadHotels(latitude, longitude) {
 $(document).ready(function() {
 	$(".city").text(currentCity);
 	$("body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
-	
+
 	$(document).on("click", ".info", function(){
 		var value = $(this).attr("value");
 		$("#main-content").removeClass("display-none");
@@ -273,15 +274,21 @@ $(document).ready(function() {
 			parseEventForm();
 		}
 		if (value === "hotels") {
-			$(".hotel-choices").empty();
+			$(".hotel-name, .hotel-address, .hotel-website").empty();
 			loadHotels(latitude, longitude);
 		}
 	});
 
-	$(document).on("click", "#next-btn", function() {
-
-
-
+	$(document).on("click", ".next-btn", function(e) {
+		e.preventDefault();
+		if (hotelCounter < 4) {
+			hotelCounter++;
+		}
+		else {
+			hotelCounter = 0;
+		}
+		$(".hotel-name, .hotel-address, .hotel-website").empty();
+		loadHotels(latitude, longitude);
 	});
 
 	$(document).on("click", "#close-button", function(){
