@@ -186,3 +186,9 @@ body{
 	background: black;
 	font-size: 24px;
 }
+
+.destination-form {
+	background: red;
+	font-size: 26px;
+	text-align: center;
+}
