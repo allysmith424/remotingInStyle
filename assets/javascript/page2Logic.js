@@ -233,6 +233,7 @@ function convertToEventfulDateFormat(dateString){
 	return year + month + day + "00";
 }
 
+// finds 5 hotels within 40km of city
 function loadHotels(latitude, longitude) {
 
 	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + latitude + "&longitude=" + longitude + "&radius=40&check_in=2018-02-10&check_out=2018-02-11&number_of_results=5";
@@ -242,43 +243,11 @@ function loadHotels(latitude, longitude) {
 		method: "GET"
 	}).then(function(response) {
 
-		$("#main-content").append("<div class='pure-u-1-5'>&nbsp;</div>");
+		$(".hotel-name").text(response.results[hotelCounter].property_name);
 
-		var hotelDiv = $("<div>");
-		hotelDiv.attr("id", "hotel-div").addClass("pure-u-3-5");
+		$(".hotel-address").append(response.results[hotelCounter].address.line1).append("<br>").append(response.results[hotelCounter].address.city).append("<br>").append(response.results[hotelCounter].address.postal_code);
 
-		var img = $("<img>");
-		img.attr("src", "assets/images/hotel.png");
-		img.addClass("hotel-image");
-
-		var hotelInfo = $("<div>");
-		hotelInfo.addClass("hotel-info");
-
-		var hotelName = $("<h4>");
-		hotelName.text(response.results[hotelCounter].property_name);
-
-		var hotelAddress = $("<p>");
-		hotelAddress.addClass("hotel-address").append(response.results[hotelCounter].address.line1).append("<br>").append(response.results[hotelCounter].address.city).append("<br>").append(response.results[hotelCounter].address.postal_code);
-
-		var hotelWebsite = $("<p>");
-		var hotelLink = $("<a>");
-		var link = response.results[hotelCounter]._links.href;
-		console.log(link);
-		hotelLink.attr("href", link);
-
-		hotelLink.text("Website");
-		hotelWebsite.append(hotelLink);
-
-		hotelInfo.append(hotelName, hotelAddress, hotelWebsite);
-
-		var nextBtn = $("<button>");
-		nextBtn.addClass("next-btn").text("next");
-
-		hotelDiv.append(img, hotelInfo, nextBtn);
-
-		$("#main-content").append(hotelDiv);
-
-		$("#main-content").append("<div class='pure-u-1-5'>&nbsp;</div>");
+		$(".hotel-website").append("<a href='" + response.results[hotelCounter]._links.href + "'>Website</a>");
 
 	});
 
@@ -287,7 +256,7 @@ function loadHotels(latitude, longitude) {
 $(document).ready(function() {
 	$(".city").text(currentCity);
 	$("body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
-	
+
 	$(document).on("click", ".info", function(){
 		var value = $(this).attr("value");
 		$("#main-content").removeClass("display-none");
@@ -304,20 +273,28 @@ $(document).ready(function() {
 		if(value === "events") {
 			parseEventForm();
 		}
+		if (value === "hotels") {
+			$(".hotel-name, .hotel-address, .hotel-website").empty();
+			loadHotels(latitude, longitude);
+		}
+	});
+
+	$(document).on("click", ".next-btn", function(e) {
+		e.preventDefault();
+		if (hotelCounter < 4) {
+			hotelCounter++;
+		}
+		else {
+			hotelCounter = 0;
+		}
+		$(".hotel-name, .hotel-address, .hotel-website").empty();
+		loadHotels(latitude, longitude);
 	});
 
 	$(document).on("click", "#close-button", function(){
 		$("#main-content").addClass("display-none");
 		$(".content").addClass("display-none");
 		playingImageSlideshow = 0;
-	});
-
-	$(".hotel-options").on("click", function() {
-
-		$("#main-content").empty();
-
-		loadHotels(latitude, longitude);
-
 	});
 
 	findForecast(latitude, longitude);
