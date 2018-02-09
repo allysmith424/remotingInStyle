@@ -13,7 +13,7 @@ body{
 }
 
 header{
-	background-color: rgba(255, 255, 255, .6);
+	background-color: rgba(209, 209, 209, .8);
 	margin-right: 20vw;
 	margin-left: 4vw;
 	margin-bottom: 6vh;
@@ -45,6 +45,10 @@ h4{
 	font-family: "affectionately_yoursregular";
 	font-size: 45px;
 	text-align: center;
+}
+
+input{
+	outline: 1px solid black;
 }
 
 .top-row{
@@ -111,6 +115,8 @@ h4{
 
 .hidden-box-content{
 	margin-top: 3vh;
+	margin-left: 3vw;
+	margin-right: 3vw;
 }
 
 .hidden-box-content img{
@@ -136,12 +142,25 @@ h4{
     -webkit-animation-fill-mode: forwards;
 }
 
+.asterisk{
+	color: #a62d27;
+	font-family: "Nunito";
+}
+
+.event-prompt{
+	font-family: "Nunito";
+	font-weight: 600;
+	font-size: 20px;
+	margin-bottom: 2.5vh;
+}
+
 #main-content{
 	margin-left: 4vw;
 	margin-top: 4vh;
 	height: 58vh;
-	background: rgba(255, 255, 255, 0.6);
+	background: rgba(209, 209, 209, 0.8);
 	border-radius: 15px;
+	overflow: auto;
 }
 
 #weather-image{
@@ -165,10 +184,74 @@ h4{
 	width: 3vw;
 	height: auto;
 	float: right;
+	margin-top: .4vh;
+	margin-right: .2vw;
 }
 
 #close-button:hover{
 	cursor: pointer;
+}
+
+#event-form{
+	font-family: "Nunito";
+	font-weight: 600;
+}
+
+#event-form legend{
+	padding-bottom: 1vh;
+	border-bottom: 2px solid black;
+	font-size: 24px;
+	margin-bottom: .7vh;
+}
+
+#event-form label{
+	font-family: "Nunito";
+	font-size: 18px;
+	font-weight: 500;
+}
+
+#event-form input{
+	font-size: 18px;
+	margin-top: 1.5vh;
+	margin-bottom: 2.5vh;
+}
+
+#required-fields{
+	font-family: "Nunito";
+	font-size: 15px;
+	font-weight: 400;
+	margin-bottom: 0;
+}
+
+#submit-event-form{
+	font-family: "Nunito";
+	font-size: 18px;
+	font-weight: 700;
+	background: white;
+	border: 1px solid black;
+	text-align: center;
+	padding-top: 1vh;
+	padding-bottom: 1vh;
+	margin-right: 18vw;
+	margin-top: 4vh;
+	margin-bottom: 1.5vh;
+}
+
+#submit-event-form:hover{
+	cursor: pointer;
+	background: black;
+	color: white;
+}
+
+#event-form .event-checkboxes label{
+	display: block;
+	font-size: 16px;
+}
+
+#event-form .event-checkboxes input{
+	vertical-align: 1px;
+	margin-right: .2vw;
+	-webkit-transform: scale(.8);
 }
 
 @-webkit-keyframes fadeIn-animation {
