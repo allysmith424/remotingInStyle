@@ -1,5 +1,5 @@
 body{
-	background: url(assets/images/computer_background.jpg);
+	background: url(../images/computer_background.jpg);
 	background-size: cover;
 }
 
@@ -65,7 +65,7 @@ body{
 	font-family: 'Shrikhand', cursive;
 	font-size: 85px;
 	color: rgba(225,225,225,.1);
-	background-image: url(assets/images/landscape.jpg);
+	background-image: url(../images/landscape.jpg);
 	background-repeat: repeat-x;
 	-webkit-background-clip: text;
 	animation: backscroll 20s linear infinite;
@@ -105,7 +105,7 @@ body{
 }
 
 .snowy {
-	background-image: url(assets/images/icon_snowy_70.png);
+	background-image: url(../images/icon_snowy_70.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 256px;
@@ -113,7 +113,7 @@ body{
 }
 
 .overcast {
-	background-image: url(assets/images/icon_overcast_70.png);
+	background-image: url(../images/icon_overcast_70.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 256px;
@@ -121,7 +121,7 @@ body{
 }
 
 .sunny {
-	background-image: url(assets/images/icon_sunny_70.png);
+	background-image: url(../images/icon_sunny_70.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 256px;
@@ -129,7 +129,7 @@ body{
 }
 
 .rainy {
-	background-image: url(assets/images/icon_rainy_70.png);
+	background-image: url(../images/icon_rainy_70.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 256px;
@@ -182,13 +182,6 @@ body{
 	box-shadow: 4px 4px black;
 }
 
-.form-layout {
-	background: black;
-	font-size: 24px;
-}
-
-.destination-form {
-	background: red;
-	font-size: 26px;
-	text-align: center;
+.origin {
+	margin: 0px;
 }
