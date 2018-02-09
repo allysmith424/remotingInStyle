@@ -9,27 +9,39 @@
 
 	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="assets/style/page2Style.css">
-	
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/page2Style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
-
 </head>
 
 <body>
 
 	<div class="pure-g top-row">
-		<div class="pure-u-19-24">
+		<div class="pure-u-18-24">
 			<header>
-				<img src = "sun.png" id = "weather-image">
-				<h1>Welcome to San Francisco</h1>
+				<img src = "assets/images/sun.png" id = "weather-image">
+				<h1>Welcome to <span class = "city"></span></h1>
 			</header>
-			<div id = "main-content">
-				<h2>Main Content</h2>
+			<div class="display-none" id = "main-content">
+				<img src="assets/images/close-button.png" id="close-button"><br>
+				<div class = "display-none content" id = "slideshow">
+					<h4>Destination Photos</h4>
+					<div class = "hidden-box-content" id = "images"></div>
+				</div>
+				<div class = "display-none content" id = "hotels">
+					<div class = "hidden-box-content" id = ""></div>
+				</div>
+				<div class = "display-none content" id = "events">
+					<div class = "hidden-box-content" id = ""></div>
+				</div>
+				<div class = "display-none content" id = "reviews">
+					<div class = "hidden-box-content" id = ""></div>
+				</div>
 			</div>
 		</div>
 
-		<div class="pure-u-1-24"></div>
+		<div class="pure-u-2-24"></div>
 		<div class="pure-u-4-24 has-text" id = "forecast">
 			<h2>Ten Day Forecast</h2>
 			<div id="weather-stats"></div>
@@ -38,20 +50,20 @@
 
 	<div class="pure-g bottom-row" id = "bottom-navigation">
 		<div class = "pure-u-1-24"></div>
-		<div class= "pure-u-5-24 info">
-			<h3>Photos of San Francisco</h3>
+		<div class= "pure-u-5-24 info" id="city-photos" value="slideshow">
+			<h3>Photos of <span class = "city"></span></h3>
 		</div>
 		<div class = "pure-u-1-24"></div>
-		<div class= "pure-u-5-24 info">
-			<h3>Hotel Options</h3>
+		<div class= "pure-u-5-24 info" id="hotel-options" value = "hotels">
+			<h3>Hotel Options in <span class = "city"></span></h3>
 		</div>
 		<div class = "pure-u-1-24"></div>
-		<div class= "pure-u-5-24 info">
-			<h3>Upcoming Events in San Francisco</h3>
+		<div class= "pure-u-5-24 info" id="upcoming-events" value = "events">
+			<h3>Upcoming Events in <span class = "city"></span></h3>
 		</div>
 		<div class = "pure-u-1-24"></div>
-		<div class= "pure-u-5-24 info">
-			<h3>San Francisco Reviews</h3>
+		<div class= "pure-u-5-24 info" id="city-reviews" value = "reviews">
+			<h3>Reviews of <span class = "city"></span></h3>
 		</div>
 	</div>
 

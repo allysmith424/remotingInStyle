@@ -1,19 +1,31 @@
+@font-face {
+    font-family: 'affectionately_yoursregular';
+    src: url('affectionately_yours_-_ttf-webfont.woff2') format('woff2'),
+         url('affectionately_yours_-_ttf-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body{
-	background-image: url('assets/images/GG_Bridge.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 
 header{
-	background-color: white;
-	opacity: .8;
-	margin-right: 40vw;
+	background-color: rgba(255, 255, 255, .6);
+	margin-right: 20vw;
+	margin-left: 4vw;
+	margin-bottom: 6vh;
 }
 
 h1{
-	background-color: white;
-	opacity: .8;
+	font-family: "affectionately_yoursregular";
+	font-size: 50px;
+	font-weight: 600;
 	padding-top: 2vh;
 	padding-bottom: 2vh;
-	margin-left: 5vw;
+	margin-left: 8vw;
 }
 
 h2{
@@ -24,6 +36,14 @@ h2{
 }
 
 h3{
+	font-family: "affectionately_yoursregular";
+	font-size: 30px;
+	text-align: center;
+}
+
+h4{
+	font-family: "affectionately_yoursregular";
+	font-size: 45px;
 	text-align: center;
 }
 
@@ -31,7 +51,6 @@ h3{
 	margin-top: 4vh;
 	height: 75vh;
 	margin-bottom: 6vh;
-	border: 1px solid black;
 }
 
 .bottom-row{
@@ -46,22 +65,6 @@ h3{
 .info{
 	background-color: orange;
 	opacity: .8;
-}
-
-#weather-image{
-	width: 4vw;
-	height: auto;
-	float: left;
-	margin-top: .5vh;
-}
-
-#forecast{
-	background-color: rgba(255, 0, 0, 0.4);
-}
-
-#weather-stats {
-	background-color: white;
-	opacity: 0.75;
 }
 
 .weather-day {
@@ -98,8 +101,92 @@ h3{
 	color: #777;
 }
 
-.main-content{
-	background-color: yellow;
-	opacity: .4;
+.display-none{
+	display: none;
+}
+
+.display-block{
+	display: block;
+}
+
+.hidden-box-content{
+	margin-top: 3vh;
+}
+
+.hidden-box-content img{
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 15px;
+	border: 2px solid black;
+}
+
+.fadeIn{
+    -webkit-animation-name: fadeIn-animation;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-direction: normal;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-fill-mode: forwards;
+}
+
+.fadeOut{
+    -webkit-animation-name: fadeOut-animation;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-direction: normal;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-fill-mode: forwards;
+}
+
+#main-content{
+	margin-left: 4vw;
+	margin-top: 4vh;
 	height: 58vh;
+	background: rgba(255, 255, 255, 0.6);
+	border-radius: 15px;
+}
+
+#weather-image{
+	width: 5vw;
+	height: auto;
+	float: left;
+	margin-top: .5vh;
+	margin-left: 1vw;
+}
+
+#forecast{
+	background-color: rgba(255, 0, 0, 0.4);
+}
+
+#weather-stats {
+	background-color: white;
+	opacity: 0.75;
+}
+
+#close-button{
+	width: 3vw;
+	height: auto;
+	float: right;
+}
+
+#close-button:hover{
+	cursor: pointer;
+}
+
+@-webkit-keyframes fadeIn-animation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOut-animation {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
