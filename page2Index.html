@@ -9,6 +9,8 @@
 
 	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
 	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="assets/css/datepicker.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/page2Style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -33,7 +35,41 @@
 					<div class = "hidden-box-content" id = ""></div>
 				</div>
 				<div class = "display-none content" id = "events">
-					<div class = "hidden-box-content" id = ""></div>
+					<h4>Upcoming Events</h4>
+					<div class = "hidden-box-content" id = "event-form">
+						<form>
+							<legend>Filter for Awesome and Engaging Events</legend>
+							<br>
+							<div class = "pure-g">
+								<div class = "pure-u-3-8">
+									<div class = "event-prompt">When Will You Need a Break?</div>
+									<label for = "start-date">Start Date: <span class = "asterisk">*</span></label><br>
+									<input data-toggle = "datepicker" id = "start-date"><br>
+									<label for = "start-date">End Date: <span class = "asterisk">*</span></label><br>
+									<input data-toggle = "datepicker" id = "end-date">
+									<div id = "required-fields"><span class = "asterisk">*</span> denotes a required field</div>
+									<div id = "submit-event-form">Submit</div>
+									<p id = "date-validation" class = "display-none asterisk">Please enter a start date and end date</p>
+	        						<p id = "category-validation" class = "display-none asterisk">Please select at least one category</p>
+	        						<p id = "date-order-validation" class = "display-none asterisk">Start date must be on or before end date</p>
+								</div>
+								<div class = "pure-u-1-8">
+								</div>
+								<div class = "pure-u-1-2">
+									<div class = "event-prompt" id = "event-types">What types of events do you like? <span class = "asterisk">*</span></div>
+									<div class = "pure-u-7-24 event-checkboxes">
+										<label><input type = "checkbox" id = "art"> Art</label> <label><input type = "checkbox" id = "business"> Business</label> <label><input type = "checkbox" id = "comedy"> Comedy</label> <label><input type = "checkbox" id = "music"> Concerts</label> <label><input type = "checkbox" id = "learning_education"> Education</label> <label><input type = "checkbox" id = "family_fun_kids"> Family</label> <label><input type = "checkbox" id = "festivals_parades"> Festivals</label> 
+									</div>
+									<div class = "pure-u-7-24 event-checkboxes">
+										<label><input type = "checkbox" id = "movies_film"> Film</label> <label><input type = "checkbox" id = "food"> Food</label> <label><input type = "checkbox" id = "fundraisers"> Fundraisers</label> <label><input type = "checkbox" id = "support"> Health</label> <label><input type = "checkbox" id = "holiday"> Holiday</label> <label><input type = "checkbox" id = "books"> Books</label> <label><input type = "checkbox" id = "attractions"> Museums</label>
+									</div>
+									<div class = "pure-u-9-24 event-checkboxes">
+										<label><input type = "checkbox" id = "outdoors_recreation"> Outdoors</label> <label><input type = "checkbox" id = "performing_arts"> Performances</label> <label><input type = "checkbox" id = "animals"> Pets</label> <label><input type = "checkbox" id = "politics_activism"> Politics</label> <label><input type = "checkbox" id = "religion_spirituality"> Religion</label> <label><input type = "checkbox" id = "sports"> Sports</label> <label><input type = "checkbox" id = "technology"> Technology</label>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 				<div class = "display-none content" id = "reviews">
 					<div class = "hidden-box-content" id = ""></div>
@@ -67,6 +103,7 @@
 		</div>
 	</div>
 
+	<script src="assets/javascript/datepicker.js"></script>
 	<script src="assets/javascript/page2Logic.js"></script>
 
 </body>

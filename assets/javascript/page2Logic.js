@@ -7,12 +7,31 @@ var currentCity = "San Francisco";
 var latitude = "37.7749"
 var longitude = "-122.4194";
 
+//calculates dimensions for images in slideshow
 var documentWidth = $(document).width();
 var documentHeight = $(document).height();
 var imageWidth = .6 * documentWidth;
 var imageHeight = .4 * documentHeight;
 
+//switch to turn off setInterval function that plays image slideshow
 var playingImageSlideshow = 0;
+
+//gets today's date and the date eight days from now (used to limit user input in event form)
+var today = new Date();
+var todaymm = today.getMonth() + 1;
+var todaydd = today.getDate();
+var todayyy = today.getFullYear();
+var beginning = todaymm + "/" + todaydd + "/" + todayyy;
+
+var eightDaysFromToday = new Date();
+eightDaysFromToday.setDate(eightDaysFromToday.getDate() + 8);
+var endmm = eightDaysFromToday.getMonth() + 1;
+var enddd = eightDaysFromToday.getDate();
+var endyy = eightDaysFromToday.getFullYear();
+var end = endmm + "/" + enddd + "/" + endyy;
+
+//eventfulAPIKey
+var eventfulKey = "6MjJmgvxws8Mw9hz";
 
 function findForecast(latitude, longitude) {
 
@@ -111,6 +130,107 @@ function playImageSlideshow() {
 	}, 9000);
 } 
 
+//Limits dates user can select in event form
+$(function() {
+	$('[data-toggle="datepicker"]').datepicker({
+		startDate: beginning,
+		endDate: end
+	});
+});
+
+//Collects user's inputs in the event form
+function parseEventForm(){
+	var startTemp = beginning;
+	var endTemp = end;
+
+	$("#start-date").focus(function(){
+		$("#start-date").blur();
+	});
+	$("#end-date").focus(function(){
+		$("#end-date").blur();
+	});
+
+	$(document).on("click", "#submit-event-form", function(){
+		event.preventDefault();
+		$("#date-validation").addClass("display-none");
+		$("#date-order-validation").addClass("display-none");
+		$("#category-validation").addClass("display-none");
+		var startDate = $("#start-date").val().trim();
+		var endDate = $("#end-date").val().trim();
+		var categoriesString = "";
+		var eventfulDate = convertToEventfulDateFormat(startDate) + "-" + convertToEventfulDateFormat(endDate);
+
+		$("#event-form input:checkbox").each(function(){
+			if($(this).is(":checked")){
+				if(categoriesString === "")
+					categoriesString = $(this).attr("id");
+				else
+					categoriesString = categoriesString + "+" + $(this).attr("id");
+			}
+		});
+
+		if(startDate === "" || endDate === "")
+			$("#date-validation").removeClass("display-none");
+		else if (categoriesString === "")
+			$("#category-validation").removeClass("display-none");
+		else if (verifyDateOrder(startDate, endDate) === false)
+			$("#date-order-validation").removeClass("display-none");
+		else {
+			$("#start-date").val("");
+			$("#end-date").val("");
+			$("#event-form input:checkbox").each(function(){
+				if($(this).is(":checked")){
+					$(this).prop("checked", false);
+				}
+			});
+			
+			$.ajax({
+				url: "https://api.eventful.com/json/events/search?app_key=" + eventfulKey + 
+				"&date=" + eventfulDate + "&c=" + categoriesString + "&l=" + currentCity,
+				jsonpCallback: "callback",
+				dataType: "JSONP",
+				method: "GET"  
+			}).then(function(response){
+				console.log(response.events.event);
+			});
+		}
+	});
+}
+
+//Verifies that start date is before end date
+function verifyDateOrder(start, end){
+	var startYear = parseInt(start.substr(6, 4));
+	var startMonth = parseInt(start.substr(3, 2));
+	var startDay = parseInt(start.substr(0, 2));
+	var endYear = parseInt(end.substr(6, 4));
+	var endMonth = parseInt(end.substr(3, 2));
+	var endDay = parseInt(end.substr(0, 2));
+
+	if(startYear > endYear)
+		return false;
+	else if(startYear < endYear)
+		return true;
+	else if(startMonth > endMonth)
+		return false;
+	else if(startMonth < endMonth)
+		return true;
+	else if(startDay > endDay)
+		return false;
+	else
+		return true;
+}
+
+//Converts input to proper date format required by Eventful API
+function convertToEventfulDateFormat(dateString){
+	var day;
+	var month;
+	var year;
+	day = dateString.substr(0, 2);
+	month = dateString.substr(3, 2);
+	year = dateString.substr(6, 4);
+	return year + month + day + "00";
+}
+
 $(document).ready(function() {
 	$(".city").text(currentCity);
 	$("body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
@@ -127,13 +247,17 @@ $(document).ready(function() {
 		else {
 			playingImageSlideshow = 0;
 		}
-	})
+
+		if(value === "events") {
+			parseEventForm();
+		}
+	});
 
 	$(document).on("click", "#close-button", function(){
 		$("#main-content").addClass("display-none");
 		$(".content").addClass("display-none");
 		playingImageSlideshow = 0;
-	})
+	});
 
 	findForecast(latitude, longitude);
 
