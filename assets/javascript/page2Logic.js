@@ -242,43 +242,11 @@ function loadHotels(latitude, longitude) {
 		method: "GET"
 	}).then(function(response) {
 
-		$("#main-content").append("<div class='pure-u-1-5'>&nbsp;</div>");
+		$(".hotel-name").text(response.results[hotelCounter].property_name);
 
-		var hotelDiv = $("<div>");
-		hotelDiv.attr("id", "hotel-div").addClass("pure-u-3-5");
+		$(".hotel-address").append(response.results[hotelCounter].address.line1).append("<br>").append(response.results[hotelCounter].address.city).append("<br>").append(response.results[hotelCounter].address.postal_code);
 
-		var img = $("<img>");
-		img.attr("src", "assets/images/hotel.png");
-		img.addClass("hotel-image");
-
-		var hotelInfo = $("<div>");
-		hotelInfo.addClass("hotel-info");
-
-		var hotelName = $("<h4>");
-		hotelName.text(response.results[hotelCounter].property_name);
-
-		var hotelAddress = $("<p>");
-		hotelAddress.addClass("hotel-address").append(response.results[hotelCounter].address.line1).append("<br>").append(response.results[hotelCounter].address.city).append("<br>").append(response.results[hotelCounter].address.postal_code);
-
-		var hotelWebsite = $("<p>");
-		var hotelLink = $("<a>");
-		var link = response.results[hotelCounter]._links.href;
-		console.log(link);
-		hotelLink.attr("href", link);
-
-		hotelLink.text("Website");
-		hotelWebsite.append(hotelLink);
-
-		hotelInfo.append(hotelName, hotelAddress, hotelWebsite);
-
-		var nextBtn = $("<button>");
-		nextBtn.addClass("next-btn").text("next");
-
-		hotelDiv.append(img, hotelInfo, nextBtn);
-
-		$("#main-content").append(hotelDiv);
-
-		$("#main-content").append("<div class='pure-u-1-5'>&nbsp;</div>");
+		$(".hotel-website").append("<a href='" + response.results[hotelCounter]._links.href + "'>Website</a>");
 
 	});
 
@@ -304,20 +272,22 @@ $(document).ready(function() {
 		if(value === "events") {
 			parseEventForm();
 		}
+		if (value === "hotels") {
+			$(".hotel-choices").empty();
+			loadHotels(latitude, longitude);
+		}
+	});
+
+	$(document).on("click", "#next-btn", function() {
+
+
+
 	});
 
 	$(document).on("click", "#close-button", function(){
 		$("#main-content").addClass("display-none");
 		$(".content").addClass("display-none");
 		playingImageSlideshow = 0;
-	});
-
-	$(".hotel-options").on("click", function() {
-
-		$("#main-content").empty();
-
-		loadHotels(latitude, longitude);
-
 	});
 
 	findForecast(latitude, longitude);

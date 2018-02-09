@@ -166,6 +166,7 @@ input{
 	background: rgba(209, 209, 209, 0.8);
 	border-radius: 15px;
 	overflow: auto;
+	position: relative;
 }
 
 #weather-image{
@@ -174,10 +175,6 @@ input{
 	float: left;
 	margin-top: .5vh;
 	margin-left: 1vw;
-}
-
-#forecast{
-	background-color: rgba(255, 0, 0, 0.4);
 }
 
 #weather-stats {
@@ -279,9 +276,7 @@ input{
     }
 }
 
-#hotel-div {
-	background-color: rgba(255, 255, 255, 0.6);
-	height: 300px;
+.hotel-choices {
 	position: relative;
 }
 
@@ -290,11 +285,12 @@ input{
 	position: absolute;
 	top: 30%;
 	left: 10%;
+	border: none;
 }
 
 .hotel-info {
 	position: absolute;
-	top: 15%;
+	top: 27%;
 	left: 35%;
 }
 
