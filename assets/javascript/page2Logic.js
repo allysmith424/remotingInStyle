@@ -2,10 +2,17 @@
 
 // populate DOM with day icons, high temp, low temp
 
-var currentCity = "San Francsico";
+var currentCity = "San Francisco";
 
 var latitude = "37.7749"
 var longitude = "-122.4194";
+
+var documentWidth = $(document).width();
+var documentHeight = $(document).height();
+var imageWidth = .6 * documentWidth;
+var imageHeight = .4 * documentHeight;
+
+var playingImageSlideshow = 0;
 
 function findForecast(latitude, longitude) {
 
@@ -66,13 +73,67 @@ function findForecast(latitude, longitude) {
 			$("#weather-stats").append(weatherDay);
 
 		}
-
-
 		});
-
 };
 
+function playImageSlideshow() {
+	$("#images").empty();
+	setTimeout(function() {
+		var date = new Date();
+		$("#images").append("<img class = 'display-none' id = '" + "img-" + 0 + "' src = 'https://source.unsplash.com/" + imageWidth + "x" + imageHeight + "/?" + currentCity + "/?" + date.getTime() + "'>");
+	}, 100);
+	setTimeout(function() {
+		var date = new Date();
+		$("#images").append("<img class = 'display-none' id = '" + "img-" + 1 + "' src = 'https://source.unsplash.com/" + imageWidth + "x" + imageHeight + "/?" + currentCity + "/?" + date.getTime() + "'>");
+	}, 200);
+	setTimeout(function() {
+		var date = new Date();
+		$("#images").append("<img class = 'display-none' id = '" + "img-" + 2 + "' src = 'https://source.unsplash.com/" + imageWidth + "x" + imageHeight + "/?" + currentCity + "/?" + date.getTime() + "'>");
+	}, 300);
+
+	var j = 0;
+	var slideshow = setInterval(function(){
+		if(playingImageSlideshow !== 1)
+			clearInterval(slideshow);
+		var image = $("#img-" + j);
+		image.removeClass("display-none");
+		image.addClass("display-block");
+		image.addClass("fadeIn");
+		setTimeout(function(){
+			image.addClass("fadeOut");
+			var date = new Date();
+			$("#images").append("<img class = 'display-none' id = '" + "img-" + j + "' src = 'https://source.unsplash.com/" + imageWidth + "x" + imageHeight + "/?" + currentCity + "/?" + date.getTime() + "'>");
+			j = (j + 1) % 3;
+		}, 6500);
+		setTimeout(function(){
+			image.remove();
+		}, 8500);
+	}, 9000);
+} 
+
 $(document).ready(function() {
+	$(".city").text(currentCity);
+	$("body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
+	
+	$(document).on("click", ".info", function(){
+		var value = $(this).attr("value");
+		$("#main-content").removeClass("display-none");
+		$(".content").addClass("display-none");
+		$("#" + value).removeClass("display-none");
+		if(value === "slideshow") {
+			playingImageSlideshow = 1;
+			playImageSlideshow();
+		}
+		else {
+			playingImageSlideshow = 0;
+		}
+	})
+
+	$(document).on("click", "#close-button", function(){
+		$("#main-content").addClass("display-none");
+		$(".content").addClass("display-none");
+		playingImageSlideshow = 0;
+	})
 
 	findForecast(latitude, longitude);
 
