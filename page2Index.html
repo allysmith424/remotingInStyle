@@ -25,7 +25,7 @@
 				<h1>Welcome to <span class = "city"></span></h1>
 			</header>
 			<div class="display-none" id = "main-content">
-				<img src="assets/images/close-button.png" id="close-button"><br>
+				<img src="assets/images/close-button.png" id="close-button" class="hover-pointer"><br>
 				<div class = "display-none content" id = "slideshow">
 					<h4>Destination Photos</h4>
 					<div class = "hidden-box-content" id = "images"></div>
@@ -35,7 +35,7 @@
 				</div>
 				<div class = "display-none content" id = "events">
 					<h4>Upcoming Events</h4>
-					<div class = "hidden-box-content" id = "event-form">
+					<div class = "hidden-box-content display-none" id = "event-form">
 						<form>
 							<legend>Filter for Awesome and Engaging Events</legend>
 							<br>
@@ -68,6 +68,12 @@
 								</div>
 							</div>
 						</form>
+					</div>
+					<div class = "hidden-box-content display-none" id = "event-listings">
+						<div id = "page-navigation">
+							<img id = "left-arrow" class = "hover-pointer display-none" src="assets/images/left-arrow.png">
+							<img id = "right-arrow" class = "hover-pointer display-none" src = "assets/images/right-arrow.png">
+						</div>
 					</div>
 				</div>
 				<div class="display-none content" id="reviews">
@@ -103,6 +109,7 @@
 		</div>
 	</div>
 
+	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 	<script src="assets/javascript/datepicker.js"></script>
 	<script src="assets/javascript/page2Logic.js"></script>
 

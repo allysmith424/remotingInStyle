@@ -10,7 +10,6 @@ body{
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
-	background-image: url("../images/GG_Bridge.jpg");
 }
 
 header{
@@ -124,7 +123,7 @@ input{
 	margin-right: 3vw;
 }
 
-.hidden-box-content img{
+#images img{
 	margin-left: auto;
 	margin-right: auto;
 	border-radius: 15px;
@@ -193,7 +192,7 @@ input{
 	margin-right: .2vw;
 }
 
-#close-button:hover{
+.hover-pointer:hover{
 	cursor: pointer;
 }
 
@@ -216,6 +215,7 @@ input{
 }
 
 #event-form input{
+	font-family: "Nunito";
 	font-size: 18px;
 	margin-top: 1.5vh;
 	margin-bottom: 2.5vh;
@@ -259,6 +259,63 @@ input{
 	-webkit-transform: scale(.8);
 }
 
+#event-listings{
+	font-family: "Nunito";
+	margin-bottom: 3vh;
+}
+
+#event-listings a{
+	color: black;
+	text-decoration: none;
+}
+
+#event-listings a:hover{
+	text-decoration: underline;
+}
+
+.event{
+	padding-top: 3vh;
+	padding-bottom: 3vh;
+	width: 100%;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.event-info{
+	line-height: 1.5;
+	font-size: 16px;
+	margin-left: 3vw;
+	margin-right: 3vw;
+}
+
+.event-even{
+	background: #c6def4;
+}
+
+.event-odd{
+	background: #e8eef4;
+}
+
+.event-title{
+	font-size: 25px;
+	font-weight: 700;
+}
+
+#page-navigation{
+	margin-top: 3vh;
+	width: 100%;
+	text-align: center;
+}
+
+#page-navigation img{
+	width: 2.3vw;
+	height: auto;
+}
+
+#left-arrow{
+	margin-right: 7vw;
+}
+
 @-webkit-keyframes fadeIn-animation {
     0% {
         opacity: 0;
@@ -296,11 +353,6 @@ input{
 	position: absolute;
 	top: 15%;
 	left: 35%;
-}
-
-h4 {
-	font-size: 30px;
-	margin-bottom: 0;
 }
 
 .hotel-website {
