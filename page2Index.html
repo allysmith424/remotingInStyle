@@ -58,22 +58,26 @@
 									<label for = "start-date">Start Date: <span class = "asterisk">*</span></label><br>
 									<input data-toggle = "datepicker" id = "start-date"><br>
 									<label for = "start-date">End Date: <span class = "asterisk">*</span></label><br>
-									<input data-toggle = "datepicker" id = "end-date">
+									<input data-toggle = "datepicker" id = "end-date"><br><br>
+									<div class = "event-prompt">Where Will You Be Staying?</div>
+									<label for = "address-event-form">Address:</label><br>
+									<input type = "text" id = "address-event-form"><br>
+									<label for = "maximum-distance">Maxium Distance to Travel (mi):</label><br>
+									<input type = "text" id = "maximum-distance"><br>
 									<div id = "required-fields"><span class = "asterisk">*</span> denotes a required field</div>
 									<div id = "submit-event-form">Submit</div>
-									<p id = "date-validation" class = "display-none asterisk">Please enter a start date and end date</p>
-	        						<p id = "category-validation" class = "display-none asterisk">Please select at least one category</p>
-	        						<p id = "date-order-validation" class = "display-none asterisk">Start date must be on or before end date</p>
+									<p id = "validation" class = "asterisk"></p>
+	        						<p id = "" class = "display-none asterisk">Distance must be a number greater than zero</p>
 								</div>
 								<div class = "pure-u-1-8">
 								</div>
 								<div class = "pure-u-1-2">
 									<div class = "event-prompt" id = "event-types">What types of events do you like? <span class = "asterisk">*</span></div>
 									<div class = "pure-u-7-24 event-checkboxes">
-										<label><input type = "checkbox" id = "art"> Art</label> <label><input type = "checkbox" id = "business"> Business</label> <label><input type = "checkbox" id = "comedy"> Comedy</label> <label><input type = "checkbox" id = "music"> Concerts</label> <label><input type = "checkbox" id = "learning_education"> Education</label> <label><input type = "checkbox" id = "family_fun_kids"> Family</label> <label><input type = "checkbox" id = "festivals_parades"> Festivals</label> 
+										<label><input type = "checkbox" id = "art"> Art</label> <label><input type = "checkbox" id = "books"> Books</label> <label><input type = "checkbox" id = "business"> Business</label> <label><input type = "checkbox" id = "comedy"> Comedy</label> <label><input type = "checkbox" id = "music"> Concerts</label> <label><input type = "checkbox" id = "learning_education"> Education</label> <label><input type = "checkbox" id = "family_fun_kids"> Family</label> 
 									</div>
 									<div class = "pure-u-7-24 event-checkboxes">
-										<label><input type = "checkbox" id = "movies_film"> Film</label> <label><input type = "checkbox" id = "food"> Food</label> <label><input type = "checkbox" id = "fundraisers"> Fundraisers</label> <label><input type = "checkbox" id = "support"> Health</label> <label><input type = "checkbox" id = "holiday"> Holiday</label> <label><input type = "checkbox" id = "books"> Books</label> <label><input type = "checkbox" id = "attractions"> Museums</label>
+										<label><input type = "checkbox" id = "festivals_parades"> Festivals</label> <label><input type = "checkbox" id = "movies_film"> Film</label> <label><input type = "checkbox" id = "food"> Food</label> <label><input type = "checkbox" id = "fundraisers"> Fundraisers</label> <label><input type = "checkbox" id = "support"> Health</label> <label><input type = "checkbox" id = "attractions"> Museums</label> <label><input type = "checkbox" id = "singles_social"> Nightlife</label>
 									</div>
 									<div class = "pure-u-9-24 event-checkboxes">
 										<label><input type = "checkbox" id = "outdoors_recreation"> Outdoors</label> <label><input type = "checkbox" id = "performing_arts"> Performances</label> <label><input type = "checkbox" id = "animals"> Pets</label> <label><input type = "checkbox" id = "politics_activism"> Politics</label> <label><input type = "checkbox" id = "religion_spirituality"> Religion</label> <label><input type = "checkbox" id = "sports"> Sports</label> <label><input type = "checkbox" id = "technology"> Technology</label>

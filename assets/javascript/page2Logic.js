@@ -36,6 +36,7 @@ var end = endmm + "/" + enddd + "/" + endyy;
 
 //eventfulAPIKey
 var eventfulKey = "6MjJmgvxws8Mw9hz";
+var googleMapsKey = "AIzaSyC4wHmmK9UQ73Dt3GhziiwysbQdSS-5cSE";
 
 function findForecast(latitude, longitude) {
 
@@ -150,9 +151,7 @@ function parseEventForm(){
 	var endTemp = end;
 
 	$("#event-form").removeClass("display-none");
-	$("#date-validation").addClass("display-none");
-	$("#date-order-validation").addClass("display-none");
-	$("#category-validation").addClass("display-none");
+	$("#validation").empty();
 
 	$("#start-date").focus(function(){
 		$("#start-date").blur();
@@ -163,13 +162,13 @@ function parseEventForm(){
 
 	$(document).on("click", "#submit-event-form", function(){
 		event.preventDefault();
-		$("#date-validation").addClass("display-none");
-		$("#date-order-validation").addClass("display-none");
-		$("#category-validation").addClass("display-none");
 		var startDate = $("#start-date").val().trim();
 		var endDate = $("#end-date").val().trim();
+		var userAddress = $("#address-event-form").val().trim();
+		var maximumDistance = $("#maximum-distance").val().trim();
 		var categoriesString = "";
 		var eventfulDate = convertToEventfulDateFormat(startDate) + "-" + convertToEventfulDateFormat(endDate);
+		var queryURL;
 
 		$("#event-form input:checkbox").each(function(){
 			if($(this).is(":checked")){
@@ -181,26 +180,64 @@ function parseEventForm(){
 		});
 
 		if(startDate === "" || endDate === "")
-			$("#date-validation").removeClass("display-none");
+			$("#validation").text("Please enter a start date and end date");
 		else if (categoriesString === "")
-			$("#category-validation").removeClass("display-none");
+			$("#validation").text("Please select at least one category");
 		else if (verifyDateOrder(startDate, endDate) === false)
-			$("#date-order-validation").removeClass("display-none");
+			$("#validation").text("Start date must be on or before end date");
+		else if (userAddress !== "" && maximumDistance === "")
+			$("#validation").text("Must enter a maximum distance if address is entered");
+		else if (maximumDistance !== "" && userAddress === "")
+			$("#validation").text("Must enter an address if maximum distance is entered");
+		else if(isNaN(maximumDistance) === true || parseInt(maximumDistance) <= 0)
+			$("#validation").text("Enter a numeric maximum distance greater than zero");
 		else {
-			$("#start-date").val("");
-			$("#end-date").val("");
-			$("#event-form input:checkbox").each(function(){
-				if($(this).is(":checked")){
-					$(this).prop("checked", false);
-				}
-			});
-
-			$("#event-form").addClass("display-none");
-
-			queryURL = "https://api.eventful.com/json/events/search?app_key=" + eventfulKey + 
+			if(userAddress !== "") {
+				$.ajax({
+					url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + userAddress +
+					", " + currentCity + "&key=" + googleMapsKey,
+					method: "GET" 
+				}).then(function(response){	
+					console.log(response);
+					if(parseInt(response.results.length) > 0 && !(response.results[0].hasOwnProperty("partial_match"))) {
+						var userAddressLatitude = response.results[0].geometry.location.lat;
+						var userAddressLongitude = response.results[0].geometry.location.lng;
+						queryURL = "https://api.eventful.com/json/events/search?app_key=" + eventfulKey + 
+						"&date=" + eventfulDate + "&c=" + categoriesString + "&l=" + currentCity +
+						"&page_size=5&sort_order=popularity&where=" + userAddressLatitude + "," + 
+						userAddressLongitude + "&within=" + maximumDistance;
+						$("#start-date").val("");
+						$("#end-date").val("");
+						$("#maximum-distance").val("");
+						$("#address-event-form").val("");
+						$("#event-form input:checkbox").each(function(){
+							if($(this).is(":checked"))
+								$(this).prop("checked", false);
+						});	
+						$("#event-form").addClass("display-none");
+						populateEvents(queryURL, 1);
+					}
+					else {
+						$("#validation").text("Please enter a valid address");
+					}
+				});
+			}
+			else {
+				$("#start-date").val("");
+				$("#end-date").val("");
+				$("#maximum-distance").val("");
+				$("#address-event-form").val("");
+				$("#event-form input:checkbox").each(function(){
+					if($(this).is(":checked")){
+						$(this).prop("checked", false);
+					}
+				});	
+				$("#event-form").addClass("display-none");
+				queryURL = "https://api.eventful.com/json/events/search?app_key=" + eventfulKey + 
 				"&date=" + eventfulDate + "&c=" + categoriesString + "&l=" + currentCity +
-				"&page_size=5&image_sizes=block107,medium&sort_order=popularity";
-			populateEvents(queryURL, 1)
+				"&page_size=5&sort_order=popularity";
+				populateEvents(queryURL, 1);
+			}
 		}
 	});
 }
@@ -216,7 +253,6 @@ function populateEvents(queryURL, number){
 		dataType: "JSONP",
 		method: "GET"  
 	}).then(function(response){
-		console.log(response);
 		var eventArray = response.events.event;
 		for(var i = 0; i < eventArray.length; i++) {
 			var event = eventArray[i];
@@ -334,8 +370,11 @@ $(document).ready(function() {
 			return;
 		$("#main-content").removeClass("display-none");
 		$(".content").addClass("display-none");
+		$(document).off("click", "#submit-event-form");
 		$("#left-arrow").unbind("click");
+		$("#left-arrow").addClass("display-none");
 		$("#right-arrow").unbind("click");
+		$("#right-arrow").addClass("display-none");
 		divOpened = value;
 		$("#" + value).removeClass("display-none");
 		
@@ -371,14 +410,18 @@ $(document).ready(function() {
 		loadHotels(latitude, longitude);
 	});
 
+	//Gets rid of all event listeners and clears all elements associated with a ".info" button
 	$(document).on("click", "#close-button", function(){
 		$("#main-content").addClass("display-none");
 		$(".content").addClass("display-none");
 		divOpened = "none";
 		playingImageSlideshow = 0;
 		$("#images").empty();
+		$(document).off("click", "#submit-event-form");
 		$("#left-arrow").unbind("click");
+		$("#left-arrow").addClass("display-none");
 		$("#right-arrow").unbind("click");
+		$("#right-arrow").addClass("display-none");
 		$(".event").remove();
 	});
 
