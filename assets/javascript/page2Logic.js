@@ -4,7 +4,7 @@
 
 var hotelCounter = 0;
 
-var currentCity = "San Francsico";
+var currentCity = "San Francisco";
 
 var latitude = "37.7749"
 var longitude = "-122.4194";
@@ -17,6 +17,8 @@ var imageHeight = .4 * documentHeight;
 
 //switch to turn off setInterval function that plays image slideshow
 var playingImageSlideshow = 0;
+//keeps track of which div is showing
+var divOpened = "none";
 
 //gets today's date and the date eight days from now (used to limit user input in event form)
 var today = new Date();
@@ -34,6 +36,7 @@ var end = endmm + "/" + enddd + "/" + endyy;
 
 //eventfulAPIKey
 var eventfulKey = "6MjJmgvxws8Mw9hz";
+var googleMapsKey = "AIzaSyC4wHmmK9UQ73Dt3GhziiwysbQdSS-5cSE";
 
 function findForecast(latitude, longitude) {
 
@@ -114,8 +117,10 @@ function playImageSlideshow() {
 
 	var j = 0;
 	var slideshow = setInterval(function(){
-		if(playingImageSlideshow !== 1)
+		if(playingImageSlideshow !== 1) {
 			clearInterval(slideshow);
+			return;
+		}
 		var image = $("#img-" + j);
 		image.removeClass("display-none");
 		image.addClass("display-block");
@@ -145,6 +150,9 @@ function parseEventForm(){
 	var startTemp = beginning;
 	var endTemp = end;
 
+	$("#event-form").removeClass("display-none");
+	$("#validation").empty();
+
 	$("#start-date").focus(function(){
 		$("#start-date").blur();
 	});
@@ -154,13 +162,13 @@ function parseEventForm(){
 
 	$(document).on("click", "#submit-event-form", function(){
 		event.preventDefault();
-		$("#date-validation").addClass("display-none");
-		$("#date-order-validation").addClass("display-none");
-		$("#category-validation").addClass("display-none");
 		var startDate = $("#start-date").val().trim();
 		var endDate = $("#end-date").val().trim();
+		var userAddress = $("#address-event-form").val().trim();
+		var maximumDistance = $("#maximum-distance").val().trim();
 		var categoriesString = "";
 		var eventfulDate = convertToEventfulDateFormat(startDate) + "-" + convertToEventfulDateFormat(endDate);
+		var queryURL;
 
 		$("#event-form input:checkbox").each(function(){
 			if($(this).is(":checked")){
@@ -172,30 +180,128 @@ function parseEventForm(){
 		});
 
 		if(startDate === "" || endDate === "")
-			$("#date-validation").removeClass("display-none");
+			$("#validation").text("Please enter a start date and end date");
 		else if (categoriesString === "")
-			$("#category-validation").removeClass("display-none");
+			$("#validation").text("Please select at least one category");
 		else if (verifyDateOrder(startDate, endDate) === false)
-			$("#date-order-validation").removeClass("display-none");
+			$("#validation").text("Start date must be on or before end date");
+		else if (userAddress !== "" && maximumDistance === "")
+			$("#validation").text("Must enter a maximum distance if address is entered");
+		else if (maximumDistance !== "" && userAddress === "")
+			$("#validation").text("Must enter an address if maximum distance is entered");
+		else if(isNaN(maximumDistance) === true || parseInt(maximumDistance) <= 0)
+			$("#validation").text("Enter a numeric maximum distance greater than zero");
 		else {
-			$("#start-date").val("");
-			$("#end-date").val("");
-			$("#event-form input:checkbox").each(function(){
-				if($(this).is(":checked")){
-					$(this).prop("checked", false);
-				}
-			});
-			
-			$.ajax({
-				url: "https://api.eventful.com/json/events/search?app_key=" + eventfulKey + 
-				"&date=" + eventfulDate + "&c=" + categoriesString + "&l=" + currentCity,
-				jsonpCallback: "callback",
-				dataType: "JSONP",
-				method: "GET"  
-			}).then(function(response){
-				console.log(response.events.event);
-			});
+			if(userAddress !== "") {
+				$.ajax({
+					url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + userAddress +
+					", " + currentCity + "&key=" + googleMapsKey,
+					method: "GET" 
+				}).then(function(response){	
+					console.log(response);
+					if(parseInt(response.results.length) > 0 && !(response.results[0].hasOwnProperty("partial_match"))) {
+						var userAddressLatitude = response.results[0].geometry.location.lat;
+						var userAddressLongitude = response.results[0].geometry.location.lng;
+						queryURL = "https://api.eventful.com/json/events/search?app_key=" + eventfulKey + 
+						"&date=" + eventfulDate + "&c=" + categoriesString + "&l=" + currentCity +
+						"&page_size=5&sort_order=popularity&where=" + userAddressLatitude + "," + 
+						userAddressLongitude + "&within=" + maximumDistance;
+						$("#start-date").val("");
+						$("#end-date").val("");
+						$("#maximum-distance").val("");
+						$("#address-event-form").val("");
+						$("#event-form input:checkbox").each(function(){
+							if($(this).is(":checked"))
+								$(this).prop("checked", false);
+						});	
+						$("#event-form").addClass("display-none");
+						populateEvents(queryURL, 1);
+					}
+					else {
+						$("#validation").text("Please enter a valid address");
+					}
+				});
+			}
+			else {
+				$("#start-date").val("");
+				$("#end-date").val("");
+				$("#maximum-distance").val("");
+				$("#address-event-form").val("");
+				$("#event-form input:checkbox").each(function(){
+					if($(this).is(":checked")){
+						$(this).prop("checked", false);
+					}
+				});	
+				$("#event-form").addClass("display-none");
+				queryURL = "https://api.eventful.com/json/events/search?app_key=" + eventfulKey + 
+				"&date=" + eventfulDate + "&c=" + categoriesString + "&l=" + currentCity +
+				"&page_size=5&sort_order=popularity";
+				populateEvents(queryURL, 1);
+			}
 		}
+	});
+}
+
+//Populates events div with events
+function populateEvents(queryURL, number){
+	$("#event-listings").removeClass("display-none");
+	$("#back-button").removeClass("display-none");
+
+	$.ajax({
+		url: queryURL + "&page_number=" + number,
+		jsonpCallback: "callback",
+		dataType: "JSONP",
+		method: "GET"  
+	}).then(function(response){
+		var eventArray = response.events.event;
+		for(var i = 0; i < eventArray.length; i++) {
+			var event = eventArray[i];
+			
+			var eventDiv = $("<div>");
+			eventDiv.addClass("event");
+			
+			var eventInfoDiv = $("<div>");
+			eventInfoDiv.addClass("event-info");
+			eventInfoDiv.append("<a target = '_blank' href='" + event.url + "'><p class = 'event-title'>" + event.title + "</p></a>");
+			
+			var startTime = moment(event.start_time).format('dddd MMM DD, h:mm a');
+			eventInfoDiv.append("<p class='event-start-date'>Starts: " + startTime + "</p>");
+			eventInfoDiv.append("<p class='event-location'><a target = '_blank' href='" + event.venue_url + "'>" + 
+				event.venue_name + "</a> | <a target = '_blank' href='https://www.google.com/maps/search/?api=1&query=" +
+				event.latitude + "," + event.longitude + "'>" + event.venue_address + " " + 
+				event.city_name + ", " + event.region_abbr + "</a></p>");
+			
+			eventDiv.append(eventInfoDiv);
+			if(i % 2 === 0)
+				eventDiv.addClass("event-even");
+			else
+				eventDiv.addClass("event-odd");
+			$("#event-listings").prepend(eventDiv);
+		}
+
+		if(parseInt(response.page_number) <= 1)
+			$("#left-arrow").addClass("display-none");
+		else
+			$("#left-arrow").removeClass("display-none");
+
+		if(response.page_number === response.page_count)
+			$("#right-arrow").addClass("display-none");
+		else
+			$("#right-arrow").removeClass("display-none");
+
+		$("#left-arrow").on("click", function(){
+			$("#left-arrow").unbind("click");
+			$("#right-arrow").unbind("click");
+			$(".event").remove();
+			populateEvents(queryURL, --number);
+		});
+
+		$("#right-arrow").on("click", function(){ 
+			$("#left-arrow").unbind("click");
+			$("#right-arrow").unbind("click");
+			$(".event").remove();
+			populateEvents(queryURL, ++number);	
+		});
 	});
 }
 
@@ -227,8 +333,9 @@ function convertToEventfulDateFormat(dateString){
 	var day;
 	var month;
 	var year;
-	day = dateString.substr(0, 2);
-	month = dateString.substr(3, 2);
+
+	day = dateString.substr(3, 2);
+	month = dateString.substr(0, 2);
 	year = dateString.substr(6, 4);
 	return year + month + day + "00";
 }
@@ -259,20 +366,32 @@ $(document).ready(function() {
 
 	$(document).on("click", ".info", function(){
 		var value = $(this).attr("value");
+		if(divOpened === value)
+			return;
 		$("#main-content").removeClass("display-none");
 		$(".content").addClass("display-none");
+		$(document).off("click", "#submit-event-form");
+		$("#left-arrow").unbind("click");
+		$("#left-arrow").addClass("display-none");
+		$("#right-arrow").unbind("click");
+		$("#right-arrow").addClass("display-none");
+		divOpened = value;
 		$("#" + value).removeClass("display-none");
+		
 		if(value === "slideshow") {
 			playingImageSlideshow = 1;
 			playImageSlideshow();
 		}
 		else {
 			playingImageSlideshow = 0;
+			$("#images").empty();
 		}
 
-		if(value === "events") {
+		if(value === "events")
 			parseEventForm();
-		}
+		else 
+			$(".event").remove();
+
 		if (value === "hotels") {
 			$(".hotel-name, .hotel-address, .hotel-website").empty();
 			loadHotels(latitude, longitude);
@@ -291,10 +410,19 @@ $(document).ready(function() {
 		loadHotels(latitude, longitude);
 	});
 
+	//Gets rid of all event listeners and clears all elements associated with a ".info" button
 	$(document).on("click", "#close-button", function(){
 		$("#main-content").addClass("display-none");
 		$(".content").addClass("display-none");
+		divOpened = "none";
 		playingImageSlideshow = 0;
+		$("#images").empty();
+		$(document).off("click", "#submit-event-form");
+		$("#left-arrow").unbind("click");
+		$("#left-arrow").addClass("display-none");
+		$("#right-arrow").unbind("click");
+		$("#right-arrow").addClass("display-none");
+		$(".event").remove();
 	});
 
 	findForecast(latitude, longitude);
