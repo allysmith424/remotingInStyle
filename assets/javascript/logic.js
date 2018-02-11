@@ -334,7 +334,6 @@ function weatherQuery(name, latitude, longitude) {
 			if (desiredWeather === "rain" || desiredWeather === "snow") {
 				if (response.daily.icon === desiredWeather) {
 				matchingCities.push(name);
-				console.log(name);
 				}
 			}
 
@@ -342,13 +341,11 @@ function weatherQuery(name, latitude, longitude) {
 				if (desiredTemp === "hot" && parseInt(response.daily.data[0].temperatureHigh) > 70) {
 					if (response.daily.icon === desiredWeather) {
 						matchingCities.push(name);
-						console.log(name);
 					} 
 				}
 				else if (desiredTemp === "cold" && parseInt(response.daily.data[0].temperatureHigh) < 70) {
 					if (response.daily.icon === desiredWeather) {
 						matchingCities.push(name);
-						console.log(name);
 					} 
 				}
 			}
@@ -362,7 +359,7 @@ function addToPage() {
 
 		potentialCity = $("<a>");
 
-		potentialCity.addClass("pure-button").attr("id", "button").attr("href","#").text(matchingCities[i]).attr("data-name", matchingCities[i]);
+		potentialCity.addClass("pure-button").attr("id", "button").attr("href","page2Index.html").text(matchingCities[i]).attr("data-name", matchingCities[i]);
 
 		$(".city-button").append(potentialCity);
 
@@ -385,7 +382,7 @@ $(document).ready(function() {
 
 		matchingCities = [];
 
-		desiredWeather = $(this).attr("id");
+		desiredWeather = $(this).attr("data-weather");
 
 		desiredTemp = $(this).attr("data-temp");
 
@@ -400,6 +397,37 @@ $(document).ready(function() {
 			addToPage();
 
 		});
+
+		localStorage.clear();
+
+		if ($(this).attr("data-weather") === "snow" || "rain") {
+			localStorage.setItem("weather", $(this).attr("data-weather"));
+		}
+		else if ($(this).attr("data-weather") === "clear-day") && $(this).attr("data-temp") === "hot" {
+			localStorage.setItem("weather", "sunny");
+		}
+		else if ($(this).attr("data-weather") === "clear-day") && $(this).attr("data-temp") === "cold" {
+			localStorage.setItem("weather", "temperate");
+		}
+
+	});
+
+	$(document).on("click", ".pure-button", function() {
+
+		localStorage.setItem("city", $(this).attr("data-name"));
+
+		for (var i = 0; i < cities.length; i++) {
+			if ($(this).attr("data-name") === cities[i].name) {
+				latitude = cities[i].latitude;
+				longitude = cities[i].longitude;
+			}
+		}
+
+		console.log("Latitude: " + latitude);
+		console.log("Longitude: " + longitude);
+
+		localStorage.setItem("latitude", latitude);
+		localStorage.setItem("longitude", longitude);
 
 	});
 

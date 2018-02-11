@@ -4,10 +4,9 @@
 
 var hotelCounter = 0;
 
-var currentCity = "San Francisco";
-
-var latitude = "37.7749"
-var longitude = "-122.4194";
+var currentCity;
+var latitude;
+var longitude;
 
 //calculates dimensions for images in slideshow
 var documentWidth = $(document).width();
@@ -361,6 +360,11 @@ function loadHotels(latitude, longitude) {
 };
 
 $(document).ready(function() {
+
+	currentCity = localStorage.getItem("city");
+	latitude = localStorage.getItem("latitude");
+	longitude = localStorage.getItem("longitude");
+
 	$(".city").text(currentCity);
 	$("body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
 
