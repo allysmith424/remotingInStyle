@@ -12,6 +12,11 @@ body{
 	background-position: center center; 
 }
 
+a {
+	text-decoration: none;
+	color: black;
+}
+
 header{
 	margin-right: 20vw;
 	margin-bottom: 6vh;
@@ -176,6 +181,7 @@ input{
 
 .daily-weather-image {
 	padding: 0 17px;
+	height: 50px;
 	display: table-cell;
 	vertical-align: middle;
 }
