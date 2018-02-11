@@ -39,6 +39,23 @@ var end = endmm + "/" + enddd + "/" + endyy;
 var eventfulKey = "6MjJmgvxws8Mw9hz";
 var googleMapsKey = "AIzaSyC4wHmmK9UQ73Dt3GhziiwysbQdSS-5cSE";
 
+//firebase initialization
+var config = {
+apiKey: "AIzaSyAlvm9H2XTBUbAJGx84uaTROnQi6FR33jI",
+authDomain: "remote-in-style-1518157314057.firebaseapp.com",
+databaseURL: "https://remote-in-style-1518157314057.firebaseio.com",
+projectId: "remote-in-style-1518157314057",
+storageBucket: "",
+messagingSenderId: "803886486196"
+};
+
+//user account variables
+firebase.initializeApp(config);
+var database = firebase.database();
+var uid; //identifier for user's node in database
+var newUser = 0;
+var userFirstName;
+
 function loadWeatherImage() {
 
 	var desiredWeather = localStorage.getItem("weather");
@@ -115,8 +132,7 @@ function findForecast(latitude, longitude) {
 			else if ((response.daily.data[i].icon === "partly-cloudy-day" || response.daily.data[i].icon === "partly-cloudy-night" || response.daily.data[i].icon === "wind" ||
 				response.daily.data[i].icon === "fog" ||response.daily.data[i].icon === "clear-day" || response.daily.data[i].icon === "cloudy") && (response.daily.data[i].temperatureHigh > 70)) {
 					dailyWeatherImage.attr("src", "assets/images/icon_sunny_70.png");
-			}
-			
+			}		
 
 			var temperatures = $("<span>");
 			temperatures.addClass("temperatures");
@@ -235,7 +251,6 @@ function parseEventForm(){
 					", " + currentCity + "&key=" + googleMapsKey,
 					method: "GET" 
 				}).then(function(response){	
-					console.log(response);
 					if(parseInt(response.results.length) > 0 && !(response.results[0].hasOwnProperty("partial_match"))) {
 						var userAddressLatitude = response.results[0].geometry.location.lat;
 						var userAddressLongitude = response.results[0].geometry.location.lng;
@@ -291,6 +306,7 @@ function populateEvents(queryURL, number){
 		method: "GET"  
 	}).then(function(response){
 		var eventArray = response.events.event;
+		var allEvents = $("<div>");
 		for(var i = 0; i < eventArray.length; i++) {
 			var event = eventArray[i];
 			
@@ -313,8 +329,10 @@ function populateEvents(queryURL, number){
 				eventDiv.addClass("event-even");
 			else
 				eventDiv.addClass("event-odd");
-			$("#event-listings").prepend(eventDiv);
+			allEvents.append(eventDiv);
 		}
+
+		$("#event-listings").prepend(allEvents);
 
 		if(parseInt(response.page_number) <= 1)
 			$("#left-arrow").addClass("display-none");
@@ -397,6 +415,67 @@ function loadHotels(latitude, longitude) {
 
 };
 
+// validates email user enters to create an account
+function validateEmail(string) {
+	if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(string))
+		return true;
+	else
+		return false;
+}
+
+function hasLettersAndNumbers(string) {
+	var hasLetter = 0;
+	var hasNumber = 0;
+	for(var i = 0; i < string.length; i++) {
+		var char = string.charAt(i);
+		if(hasNumber === 0 && isNaN(parseInt(char)) === false)
+			hasNumber = 1;
+		else if(hasLetter === 0 && (/[a-z]/i).test(string.charAt(i)) === true)
+			hasLetter = 1;
+		if(hasLetter === 1 && hasNumber === 1)
+			return true;
+	}
+	return false;
+}
+
+//Gets data from new user info form and stores in firebase
+function parseNewUserInfo(email, password) {
+	$("#signup-modal").addClass("display-none");
+	$("#new-user-info-modal").removeClass("display-none");
+	populateCountries("user-country", "user-state");
+	populateStates("user-country", "user-state");
+	$("#new-user-info-modal input:text").each(function(){
+		$(this).val("");
+	});
+	$("#user-country").val("");
+	$("#user-state").val("");
+	$("#new-user-info-error").empty();
+
+	$("#submit-new-user-info").on("click", function(){
+		$("#submit-new-user-info").unbind("click");
+		var isFieldEmpty = false;
+		$("#new-user-info-modal input:text").each(function(){
+			if($(this).val().trim() === "")
+				isFieldEmpty = true;
+		});
+		if($("#user-country").val() === "" || $("#user-state").val() === "")
+			isFieldEmpty = true;
+		if(isFieldEmpty === true)
+			$("#new-user-info-error").text("All fields must be filled out");
+		else if(isNaN(parseInt($("#user-age").val().trim())) === true)
+			$("#new-user-info-error").text("Age must be a number");
+		else {
+			console.log("authorize");
+			const auth = firebase.auth();
+			const promise = auth.createUserWithEmailAndPassword(email, password);
+			promise.catch(function(e){
+				$("#signup-error").text("An error occurred. Please try again");
+			});
+			$("#new-user-info-modal").addClass("display-none");
+		}
+	});
+}
+
 $(document).ready(function() {
 
 	currentCity = localStorage.getItem("city");
@@ -469,17 +548,23 @@ $(document).ready(function() {
 
 	$(document).on("click", "#log-in", function(){
 		$("#login-modal").removeClass("display-none");
+		$("#login-error").empty();
 	});
 
 	$(document).on("click", "#create-account", function(){
 		$("#signup-modal").removeClass("display-none");
+		$("#signup-error").empty();
 	});
 
 	$(document).on("click", "#close-login-modal", function(){
+		$("#login-modal input[type=text]").val("");
+		$("#login-modal input[type=password]").val("");
 		$("#login-modal").addClass("display-none");
 	});
 
 	$(document).on("click", "#close-signup-modal", function(){
+		$("#signup-modal input[type=text]").val("");
+		$("#signup-modal input[type=password]").val("");
 		$("#signup-modal").addClass("display-none");
 	});
 
@@ -495,9 +580,98 @@ $(document).ready(function() {
 		localStorage.clear();
 	});
 
-
 	findForecast(latitude, longitude);
 
 	loadWeatherImage();
+
+	$(document).on("click", "#close-new-user-info-modal", function(){
+		$("#new-user-info-modal").addClass("display-none");
+	});
+
+	$(document).on("click", "#submit-login", function(){
+		var email = $("#login-email-address").val().trim();
+		var password = $("#login-password").val();
+		const auth = firebase.auth();
+		const promise = auth.signInWithEmailAndPassword(email, password);
+		promise.catch(function(e) {
+			$("#login-error").text("Incorrect email or password");
+		});
+		$("#login-email-address").val("");
+		$("#login-password").val("");
+	});
+
+	$(document).on("click", "#submit-new-account", function(){
+		var email = $("#signup-email-address").val().trim();
+		var password = $("#signup-password").val();
+		var confirmationPassword = $("#confirm-password").val();
+		var object = firebase.auth().fetchProvidersForEmail(email);
+
+		
+		object.then(function(){ 
+			if(validateEmail(email) === false) {
+				$("#signup-email-address").val("");
+				$("#signup-error").text("Not a valid email");
+			}
+			else if(hasLettersAndNumbers(password) === false)
+				$("#signup-error").text("Password must contain at least one letter and one number");
+			else if(password.length < 6)
+				$("#signup-error").text("Password must be at least six characters");
+			else if(password !== confirmationPassword)
+				$("#signup-error").text("Passwords must be identical");
+			else if(object["i"].length !== 0)
+				$("#signup-error").text("An account with that email already exists");
+			else {
+				$("#signup-password").val("");
+				$("#confirm-password").val("");
+				$("#signup-email-address").val("");
+				newUser = 1;
+				parseNewUserInfo(email, password)
+			}
+
+		$("#signup-password").val("");
+		$("#confirm-password").val("");
+		$("#signup-email-address").val("");
+		
+		});
+	});
+
+	$(document).on("click", "#log-out", function(){
+		firebase.auth().signOut();
+	});
+
+	firebase.auth().onAuthStateChanged(function(firebaseUser){
+		if(firebaseUser) {
+			$("#enter-account").addClass("display-none-important");
+			$("#exit-account").removeClass("display-none-important");
+			$("#login-modal").addClass("display-none");
+			$("#new-user-info-modal").addClass("display-none");
+			uid = firebaseUser.uid;
+			if(newUser = 0) {
+				database.ref("users/" + uid + "/firstName").on("value", function(snapshot){
+					userFirstName = snapshot.val().firstName;
+				});
+			}
+			else {
+				userFirstName = $("#user-first-name").val().trim();
+				var userLastName = $("#user-last-name").val().trim();
+				var userAge = $("#user-age").val().trim();
+				var userCountry = $("#user-country").val().trim();
+				var userState = $("#user-state").val().trim();
+				database.ref("users/" + uid).set({
+					firstName: userFirstName,
+					lastName: userLastName,
+					age: userAge,
+					country: userCountry,
+					state: userState
+				});
+			}
+			$("#user-name").text(userFirstName);
+		}
+		else {
+			newUser = 0;
+			$("#enter-account").removeClass("display-none-important");
+			$("#exit-account").addClass("display-none-important");
+		}
+	});
 
 });
