@@ -182,13 +182,6 @@ body{
 	box-shadow: 4px 4px black;
 }
 
-.form-layout {
-	background: black;
-	font-size: 24px;
-}
-
-.destination-form {
-	background: red;
-	font-size: 26px;
-	text-align: center;
+.origin {
+	margin: 0px;
 }
