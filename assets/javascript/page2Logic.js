@@ -9,10 +9,12 @@ var currentCity = "San Francisco";
 var latitude = "37.7749"
 var longitude = "-122.4194";
 
+var daysShown = 7;
+
 //calculates dimensions for images in slideshow
 var documentWidth = $(document).width();
 var documentHeight = $(document).height();
-var imageWidth = .6 * documentWidth;
+var imageWidth = .5 * documentWidth;
 var imageHeight = .4 * documentHeight;
 
 //switch to turn off setInterval function that plays image slideshow
@@ -27,11 +29,11 @@ var todaydd = today.getDate();
 var todayyy = today.getFullYear();
 var beginning = todaymm + "/" + todaydd + "/" + todayyy;
 
-var eightDaysFromToday = new Date();
-eightDaysFromToday.setDate(eightDaysFromToday.getDate() + 8);
-var endmm = eightDaysFromToday.getMonth() + 1;
-var enddd = eightDaysFromToday.getDate();
-var endyy = eightDaysFromToday.getFullYear();
+var sevenDaysFromToday = new Date();
+sevenDaysFromToday.setDate(sevenDaysFromToday.getDate() + daysShown - 1);
+var endmm = sevenDaysFromToday.getMonth() + 1;
+var enddd = sevenDaysFromToday.getDate();
+var endyy = sevenDaysFromToday.getFullYear();
 var end = endmm + "/" + enddd + "/" + endyy;
 
 //eventfulAPIKey
@@ -49,12 +51,16 @@ function findForecast(latitude, longitude) {
 		method: "GET"
 		}).then(function(response) {
 
-		for (var i = 0; i < 8; i++) {
+		for (var i = 0; i < daysShown; i++) {
 
 			var weatherDay = $("<div>");
-			weatherDay.addClass("weather-day");
 
-			var dayAndDate = $("<p>");
+			if(i + 1 === daysShown)
+				weatherDay.addClass("last-weather-day");
+			else
+				weatherDay.addClass("weather-day");
+
+			var dayAndDate = $("<span>");
 			dayAndDate.addClass("day-and-date");
 			var day = $("<span>");
 			day.addClass("day");
@@ -81,7 +87,7 @@ function findForecast(latitude, longitude) {
 			// if (response.daily.data[i].icon)
 			// dailyWeatherImage.addClass("daily-weather-image");
 
-			var temperatures = $("<p>");
+			var temperatures = $("<span>");
 			temperatures.addClass("temperatures");
 			var tempHigh = $("<span>");
 			tempHigh.addClass("temp-high");
@@ -411,7 +417,7 @@ $(document).ready(function() {
 	});
 
 	//Gets rid of all event listeners and clears all elements associated with a ".info" button
-	$(document).on("click", "#close-button", function(){
+	$(document).on("click", "#close-content", function(){
 		$("#main-content").addClass("display-none");
 		$(".content").addClass("display-none");
 		divOpened = "none";
@@ -423,6 +429,22 @@ $(document).ready(function() {
 		$("#right-arrow").unbind("click");
 		$("#right-arrow").addClass("display-none");
 		$(".event").remove();
+	});
+
+	$(document).on("click", "#log-in", function(){
+		$("#login-modal").removeClass("display-none");
+	});
+
+	$(document).on("click", "#create-account", function(){
+		$("#signup-modal").removeClass("display-none");
+	});
+
+	$(document).on("click", "#close-login-modal", function(){
+		$("#login-modal").addClass("display-none");
+	});
+
+	$(document).on("click", "#close-signup-modal", function(){
+		$("#signup-modal").addClass("display-none");
 	});
 
 	findForecast(latitude, longitude);

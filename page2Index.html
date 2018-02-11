@@ -17,32 +17,79 @@
 </head>
 
 <body>
+	<div class = "display-none login-modal-formatting" id = "login-modal">
+		<img src="assets/images/close-button.png" id="close-login-modal" class="hover-pointer close-button">
+		<h3>Log In</h3>
+		<form>
+			<p>Click "Create Account" if you do not have an account</p><br>
+			<label for = "address-event-form">Email Address:</label><br>
+			<input type = "text" id = "login-email-address"><br>
+			<label for = "address-event-form">Password:</label><br>
+			<input type = "text" id = "login-email-address"><br>
+			<div id = "submit-login" class = "button">Submit</div>
+		</form>
+	</div>
+	<div class = "display-none login-modal-formatting" id = "signup-modal">
+		<img src="assets/images/close-button.png" id="close-signup-modal" class="hover-pointer close-button">
+		<h3>Create an Account</h3>
+		<form>
+			<p>Click "Log In" if you already have an account</p><br>
+			<label for = "address-event-form">Email Address:</label><br>
+			<input type = "text" id = "signup-email-address"><br>
+			<label for = "address-event-form">Password:</label><br>
+			<input type = "text" id = "signup-email-address">
+			<div id = "submit-new-account" class = "button">Submit</div>
+		</form>
+	</div>
 
-	<div class="pure-g top-row">
-		<div class="pure-u-18-24">
-			<header>
+	<div class = "transparent-background" id = "custom-menu">
+		<div id = "menu-heading">Explore <span class = "city"></span>:</div>
+		<div id = "navigation">
+			<ul>
+				<li class = "info" value = "slideshow">Photos</li>
+				<li>|</li>
+				<li class = "info" value = "hotels">Hotels</li>
+				<li>|</li>
+				<li class = "info" value = "events">Events</li>
+			</ul>
+		</div>
+		<div id = "authentication">
+			<ul id = "enter-account">
+				<li id = "log-in">Log In</li>
+				<li>|</li>
+				<li id = "create-account">Create Account</li>
+			</ul>
+			<ul id = "exit-account" class = "display-none-important">
+				<li id = "log-out">Log Out</li>
+			</ul>
+		</div>
+	</div>
+	<div class="pure-g middle-row">
+		<div class="pure-u-1-24"></div>
+		<div class="pure-u-16-24">
+			<header class = "transparent-background">
 				<img src = "assets/images/sun.png" id = "weather-image">
 				<h1>Welcome to <span class = "city"></span></h1>
 			</header>
-			<div class="display-none" id = "main-content">
-				<img src="assets/images/close-button.png" id="close-button" class="hover-pointer"><br>
+			<div class="display-none transparent-background" id = "main-content">
+				<img src="assets/images/close-button.png" id="close-content" class="hover-pointer close-button"><br>
 				<div class = "display-none content" id = "slideshow">
 					<h4>Destination Photos</h4>
 					<div class = "hidden-box-content" id = "images"></div>
 				</div>
 				<div class = "display-none content" id = "hotels">
-					<h4>Local hotels</h4>
+					<h4>Local Hotels</h4>
 					<div class = "hidden-box-content" id = "hotel-choices">
 								
 						<img class="hotel-image" src="assets/images/hotel.png">
 
 						<div class="hotel-info">
-							<h5 class="hotel-name"></h5>
+							<p class="hotel-name"></p>
 							<p class="hotel-address"></p>
 							<p class="hotel-website"></p>
 						</div>
 
-						<button class="next-btn">next</button>
+						<button class="button next-btn">Next</button>
 						
 					</div>
 				</div>
@@ -50,10 +97,14 @@
 					<h4>Upcoming Events</h4>
 					<div class = "hidden-box-content display-none" id = "event-form">
 						<form>
-							<legend>Filter for Awesome and Engaging Events</legend>
+							<legend class = "pure-g">
+								<div class = "pure-u-1-24"></div>
+								<div class = "pure-u-23-24">Filter for Awesome and Engaging Events</div>
+							</legend>
 							<br>
 							<div class = "pure-g">
-								<div class = "pure-u-3-8">
+								<div class = "pure-u-1-24"></div>
+								<div class = "pure-u-8-24">
 									<div class = "event-prompt">When Will You Need a Break?</div>
 									<label for = "start-date">Start Date: <span class = "asterisk">*</span></label><br>
 									<input data-toggle = "datepicker" id = "start-date"><br>
@@ -65,13 +116,13 @@
 									<label for = "maximum-distance">Maxium Distance to Travel (mi):</label><br>
 									<input type = "text" id = "maximum-distance"><br>
 									<div id = "required-fields"><span class = "asterisk">*</span> denotes a required field</div>
-									<div id = "submit-event-form">Submit</div>
+									<div id = "submit-event-form" class="button">Submit</div>
 									<p id = "validation" class = "asterisk"></p>
 	        						<p id = "" class = "display-none asterisk">Distance must be a number greater than zero</p>
 								</div>
-								<div class = "pure-u-1-8">
+								<div class = "pure-u-2-24">
 								</div>
-								<div class = "pure-u-1-2">
+								<div class = "pure-u-13-24">
 									<div class = "event-prompt" id = "event-types">What types of events do you like? <span class = "asterisk">*</span></div>
 									<div class = "pure-u-7-24 event-checkboxes">
 										<label><input type = "checkbox" id = "art"> Art</label> <label><input type = "checkbox" id = "books"> Books</label> <label><input type = "checkbox" id = "business"> Business</label> <label><input type = "checkbox" id = "comedy"> Comedy</label> <label><input type = "checkbox" id = "music"> Concerts</label> <label><input type = "checkbox" id = "learning_education"> Education</label> <label><input type = "checkbox" id = "family_fun_kids"> Family</label> 
@@ -93,37 +144,15 @@
 						</div>
 					</div>
 				</div>
-				<div class="display-none content" id="reviews">
-					<div class ="hidden-box-content" id="">	
-					</div>
-				</div>
 			</div>
 		</div>
 
-		<div class="pure-u-2-24"></div>
-		<div class="pure-u-4-24 has-text" id = "forecast">
-			<h2>Ten Day Forecast</h2>
+		<div class="pure-u-1-24"></div>
+		<div class="pure-u-5-24 transparent-background" id = "forecast">
+			<h2>Seven Day Forecast</h2>
 			<div id="weather-stats"></div>
 		</div>
-	</div>
-
-	<div class="pure-g bottom-row" id = "bottom-navigation">
-		<div class = "pure-u-1-24"></div>
-		<div class= "pure-u-5-24 info" id="city-photos" value="slideshow">
-			<h3>Photos of <span class = "city"></span></h3>
-		</div>
-		<div class = "pure-u-1-24"></div>
-		<div class= "pure-u-5-24 info" id="hotel-options" value = "hotels">
-			<h3>Hotel Options in <span class = "city"></span></h3>
-		</div>
-		<div class = "pure-u-1-24"></div>
-		<div class= "pure-u-5-24 info" id="upcoming-events" value = "events">
-			<h3>Upcoming Events in <span class = "city"></span></h3>
-		</div>
-		<div class = "pure-u-1-24"></div>
-		<div class= "pure-u-5-24 info" id="city-reviews" value = "reviews">
-			<h3>Reviews of <span class = "city"></span></h3>
-		</div>
+		<div class="pure-u-1-24"></div>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
