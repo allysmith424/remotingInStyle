@@ -56,10 +56,15 @@ input{
 	outline: 1px solid black;
 }
 
-#close-login-modal, #close-signup-modal{
+.close-button{
 	width: 2.5vw;
 	height: auto;
 	margin-right: .2vw;
+}
+
+#new-user-info-modal{
+	top: 17%;
+	z-index: 3;
 }
 
 .login-modal-formatting{
@@ -87,7 +92,7 @@ input{
 	padding-bottom: 2vh;
 }
 
-.login-modal-formatting input{
+.login-modal-formatting input, .login-modal-formatting select{
 	margin-top: 1vh;
 	margin-bottom: 1.5vh;
 	width: 40%;
@@ -96,7 +101,7 @@ input{
 .login-modal-formatting .button{
 	width: 15%;
 	margin-top: 1.5vh;
-	margin-bottom: .5vh;
+	margin-bottom: 1vh;
 }
 
 #custom-menu{
@@ -133,7 +138,7 @@ input{
 	padding-left: 3vw;
 }
 
-#custom-menu li:hover{
+#custom-menu .link:hover{
 	cursor: pointer;
 	text-decoration: underline;
 }
@@ -362,6 +367,8 @@ input{
 #event-listings{
 	font-family: "Nunito";
 	margin-bottom: 3vh;
+	margin-right: 2.5vw;
+	margin-left: 2.5vw;
 }
 
 #event-listings a{
@@ -384,8 +391,8 @@ input{
 .event-info{
 	line-height: 1.5;
 	font-size: 16px;
-	margin-left: 3vw;
-	margin-right: 3vw;
+	padding-left: 2vw;
+	padding-right: 2vw;
 }
 
 .event-even{
