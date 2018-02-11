@@ -576,9 +576,9 @@ $(document).ready(function() {
 		localStorage.setItem("Weather chosen", "true");
 	});
 
-	$(window).unload(function(){
-		localStorage.clear();
-	});
+	// $(window).unload(function(){
+	// 	localStorage.clear();
+	// });
 
 	findForecast(latitude, longitude);
 
