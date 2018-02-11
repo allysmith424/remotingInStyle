@@ -104,7 +104,7 @@ body{
 	text-align: center;
 }
 
-.snowy {
+#snow {
 	background-image: url(../images/icon_snowy_70.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -112,7 +112,7 @@ body{
 	margin: 10px;
 }
 
-.overcast {
+#clear-day-cold {
 	background-image: url(../images/icon_overcast_70.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -120,7 +120,7 @@ body{
 	margin: 10px;
 }
 
-.sunny {
+#clear-day-hot {
 	background-image: url(../images/icon_sunny_70.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -128,7 +128,7 @@ body{
 	margin: 10px;
 }
 
-.rainy {
+#rain {
 	background-image: url(../images/icon_rainy_70.png);
 	background-repeat: no-repeat;
 	background-position: center;
