@@ -1,25 +1,3 @@
-// take weather type inputted
-
-// run 30(?) ajax queries
-
-	// cities stored in an array
-
-		// objects with name, latitude, longitude
-
-	// for loop that runs through array
-
-		// match results with weather type inputted
-
-			// IF match
-
-				// add to list
-
-				// run hotel search for that location
-
-				// run wifi search for that location
-
-				// run picture search for that location
-
 var cities = [
 	{
 		"name": "Austin",
