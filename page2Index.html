@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="assets/css/datepicker.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/jquery.rateyo.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/page2Style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -17,7 +18,7 @@
 	<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
 </head>
 
-<body>
+<body id = "page2body">
 	<div class = "display-none login-modal-formatting" id = "login-modal">
 		<img src="assets/images/close-button.png" id="close-login-modal" class="hover-pointer close-button">
 		<h3>Log In</h3>
@@ -94,6 +95,7 @@
 		<div class="pure-u-16-24">
 			<header class = "transparent-background">
 				<a href="index.html" id="weather-image-link"><img id = "weather-image"></a>
+				<span class = "rateYo-city"></span>
 				<a href="index.html" id="city-name-link"><h1 id="city-name">Welcome to <span class = "city"></span></h1></a>
 			</header>
 			<div class="display-none transparent-background" id = "main-content">
@@ -183,6 +185,7 @@
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 	<script src="assets/javascript/countries.js"></script>
 	<script src="assets/javascript/datepicker.js"></script>
+	<script src="assets/javascript/jquery.rateyo.js"></script>
 	<script src="assets/javascript/page2Logic.js"></script>
 
 </body>
