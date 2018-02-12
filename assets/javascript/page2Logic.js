@@ -4,7 +4,7 @@
 
 var hotelCounter = 0;
 
-var currentCity;
+var currentCity = "San Francisco"; //REMOVE THIS ONCE WE GET ACCESS TO THE API AGAIN
 var latitude;
 var longitude;
 
@@ -53,8 +53,10 @@ messagingSenderId: "803886486196"
 firebase.initializeApp(config);
 var database = firebase.database();
 var uid; //identifier for user's node in database
-var newUser = 0;
-var userFirstName;
+var loggedIn = 0; //identifies whether user is logged in
+var newUser = 0; //identifies whether user is new
+var userFirstName; //user's first name (to be displayed in header)
+var userCities = []; //user's favorite cities
 
 function loadWeatherImage() {
 
@@ -195,6 +197,30 @@ $(function() {
 	$('[data-toggle="datepicker"]').datepicker({
 		startDate: beginning,
 		endDate: end
+	});
+});
+
+//Initializes "add to favorites" star
+$(function(){
+	$(".rateYo-city").rateYo({
+		numStars: 1,
+		fullStar: true,
+		starWidth: "40px",
+	});
+});
+
+$(function(){
+	$(".rateYo-city").rateYo().on("rateyo.set", function(e, data){
+		if(data.rating === 5) {
+			database.ref("users/" + uid + "/favoriteCities/" + currentCity).update({
+				favorite: "true"
+			});
+		}
+		else {
+			database.ref("users/" + uid + "/favoriteCities/" + currentCity).update({
+				favorite: null
+			});
+		}
 	});
 });
 
@@ -465,7 +491,6 @@ function parseNewUserInfo(email, password) {
 		else if(isNaN(parseInt($("#user-age").val().trim())) === true)
 			$("#new-user-info-error").text("Age must be a number");
 		else {
-			console.log("authorize");
 			const auth = firebase.auth();
 			const promise = auth.createUserWithEmailAndPassword(email, password);
 			promise.catch(function(e){
@@ -477,14 +502,17 @@ function parseNewUserInfo(email, password) {
 }
 
 $(document).ready(function() {
-
 	currentCity = localStorage.getItem("city");
 	latitude = localStorage.getItem("latitude");
 	longitude = localStorage.getItem("longitude");
 
 	$(".city").text(currentCity);
-	$("body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
+	$("#page2body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
+	$(".rateYo-city").rateYo("option", "readOnly", true);
 
+	if(currentCity.indexOf(userCities) > -1)
+		$(".rateYo-city").rateYo("rating", 5);
+	
 	$(document).on("click", ".info", function(){
 		var value = $(this).attr("value");
 		if(divOpened === value)
@@ -645,10 +673,20 @@ $(document).ready(function() {
 			$("#exit-account").removeClass("display-none-important");
 			$("#login-modal").addClass("display-none");
 			$("#new-user-info-modal").addClass("display-none");
+			$(".rateYo-city").rateYo("option", "readOnly", false);
+			loggedIn = 1;
 			uid = firebaseUser.uid;
-			if(newUser = 0) {
-				database.ref("users/" + uid + "/firstName").on("value", function(snapshot){
+			if(newUser === 0) {
+				database.ref("/users/" + uid).on("value", function(snapshot){
 					userFirstName = snapshot.val().firstName;
+					$("#user-name").text(userFirstName);
+				});
+				database.ref("/users/" + uid + "/favoriteCities").on("value", function(snapshot){
+					if(snapshot.hasChild(currentCity))
+						$(".rateYo-city").rateYo("rating", 5);
+					var cityKeys = snapshot.val();
+					for(var key in cityKeys)
+						userCities.push(key);
 				});
 			}
 			else {
@@ -664,11 +702,16 @@ $(document).ready(function() {
 					country: userCountry,
 					state: userState
 				});
+				$("#user-name").text(userFirstName);
 			}
-			$("#user-name").text(userFirstName);
 		}
 		else {
 			newUser = 0;
+			loggedIn = 0;
+			uid = "";
+			userCities = [];
+			$(".rateYo-city").rateYo("option", "readOnly", true);
+			$(".rateYo-city").rateYo("rating", 0);
 			$("#enter-account").removeClass("display-none-important");
 			$("#exit-account").addClass("display-none-important");
 		}
