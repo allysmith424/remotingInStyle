@@ -18,17 +18,19 @@ a {
 }
 
 header{
-	margin-right: 20vw;
+	width: 80%;
 	margin-bottom: 6vh;
+	display: table;
+	vertical-align: middle;
+	padding-top: 2.5vh;
+	padding-bottom: 2.5vh;
 }
 
 h1{
 	font-family: "affectionately_yoursregular";
 	font-size: 4.2vw;
 	font-weight: 600;
-	padding-top: 2vh;
-	padding-bottom: 2vh;
-	margin-left: 8vw;
+	display: table-cell;
 }
 
 h2{
@@ -54,6 +56,12 @@ h4{
 
 input{
 	outline: 1px solid black;
+}
+
+.rateYo-city{
+	display: table-cell;
+	padding-left: 2.3vw;
+	padding-right: 1.3vw;
 }
 
 .close-button{
@@ -272,10 +280,11 @@ input{
 }
 
 #weather-image{
-	width: 5vw;
-	float: left;
-	margin-top: .5vh;
-	margin-left: 1vw;
+	width: 4vw;
+	position: relative;
+	top: 1vh;
+	left: 1vw;
+	display: table-cell;
 }
 
 .close-button{
