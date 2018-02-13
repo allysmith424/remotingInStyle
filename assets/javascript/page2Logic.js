@@ -82,11 +82,10 @@ function findForecast(latitude, longitude) {
 	$("#weather-stats").empty();
 
 	var queryURL = "https://api.darksky.net/forecast/7c1ee8ce08e3d4210e427e13b9b51926/" + latitude + "," + longitude;
-
-	$.ajax({
-		url: queryURL,
-		method: "GET"
-		}).then(function(response) {
+	var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+	var targetUrl = queryURL;
+    
+	$.get(proxyUrl + targetUrl, function(response) {
 
 		for (var i = 0; i < daysShown; i++) {
 
@@ -152,7 +151,7 @@ function findForecast(latitude, longitude) {
 			$("#weather-stats").append(weatherDay);
 
 		}
-		});
+	});
 };
 
 function playImageSlideshow() {
