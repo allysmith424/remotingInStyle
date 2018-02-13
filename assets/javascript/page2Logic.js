@@ -97,20 +97,21 @@ function findForecast(latitude, longitude) {
 			else
 				weatherDay.addClass("weather-day");
 
+			var dayAndDateDiv = $("<div>");
 			var dayAndDate = $("<span>");
-			dayAndDate.addClass("day-and-date");
+			dayAndDateDiv.addClass("day-and-date");
 			var day = $("<span>");
 			day.addClass("day");
 				if (i === 0) {
-					day.append("Today<br>");
+					day.append("Tod.<br>");
 				}
 				else if (i === 1) {
-					day.append("Tomorrow<br>");
+					day.append("Tom.<br>");
 				}
 				else {
 					var today = moment();
 					today.add(i, "days");
-					day.append(today.format("dddd")).append("<br>");
+					day.append(today.format("ddd")).append("<br>");
 				}
 			var date = $("<span>");
 			date.addClass("date");
@@ -118,24 +119,26 @@ function findForecast(latitude, longitude) {
 				today.add(i, "days");
 				date.append(today.format("MMM D"));
 
-			dayAndDate.append(day, date)
+			dayAndDateDiv.append(day, date)
 
-			var dailyWeatherImage = $("<img>");
-			dailyWeatherImage.addClass("daily-weather-image");
+			var weatherImageDiv = $("<div>");
+			var weatherImage = $("<img>");
+			weatherImageDiv.addClass("daily-weather-image");
 			if ((response.daily.data[i].icon === "rain") || (response.daily.data[i].precipType === "rain" && response.daily.data[i].precipProbability > 0.3)) {
-				dailyWeatherImage.attr("src", "assets/images/icon_rainy_70.png");
+				weatherImage.attr("src", "assets/images/icon_rainy_70.png");
 			}
 			else if ((response.daily.data[i].icon === "snow") || (response.daily.data[i].precipType === "snow" && response.daily.data[i].precipProbability > 0.3)) {
-				dailyWeatherImage.attr("src", "assets/images/icon_snowy_70.png");
+				weatherImage.attr("src", "assets/images/icon_snowy_70.png");
 			}
 			else if ((response.daily.data[i].icon === "partly-cloudy-day" || response.daily.data[i].icon === "partly-cloudy-night" || response.daily.data[i].icon === "wind" || response.daily.data[i].icon === "fog" || response.daily.data[i].icon === "clear-day" || response.daily.data[i].icon === "cloudy") && (response.daily.data[i].temperatureHigh < 70)) {
-					dailyWeatherImage.attr("src", "assets/images/icon_overcast_70.png");
+					weatherImage.attr("src", "assets/images/icon_overcast_70.png");
 			}
 			else if ((response.daily.data[i].icon === "partly-cloudy-day" || response.daily.data[i].icon === "partly-cloudy-night" || response.daily.data[i].icon === "wind" ||
 				response.daily.data[i].icon === "fog" ||response.daily.data[i].icon === "clear-day" || response.daily.data[i].icon === "cloudy") && (response.daily.data[i].temperatureHigh > 70)) {
-					dailyWeatherImage.attr("src", "assets/images/icon_sunny_70.png");
+					weatherImage.attr("src", "assets/images/icon_sunny_70.png");
 			}		
 
+			weatherImageDiv.append(weatherImage);
 			var temperatures = $("<span>");
 			temperatures.addClass("temperatures");
 			var tempHigh = $("<span>");
@@ -147,7 +150,7 @@ function findForecast(latitude, longitude) {
 
 			temperatures.append(tempHigh, tempLow);
 
-			weatherDay.append(dayAndDate, dailyWeatherImage, temperatures);
+			weatherDay.append(dayAndDateDiv, weatherImageDiv, temperatures);
 
 			$("#weather-stats").append(weatherDay);
 
