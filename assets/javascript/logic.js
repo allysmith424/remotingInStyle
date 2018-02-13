@@ -311,12 +311,12 @@ var matchingCities = [];
 
 function checkWeatherChosen() {
 
-	var weatherChosen = localStorage.getItem("Weather chosen");
+	var weatherChosen = sessionStorage.getItem("Weather chosen");
 
 	console.log("Weather chosen: " + weatherChosen);
 
 	if (weatherChosen === null) {
-		localStorage.clear();
+		sessionStorage.clear();
 		return;
 	}
 	else if (weatherChosen === "false") {
@@ -325,7 +325,7 @@ function checkWeatherChosen() {
 	}
 	else if (weatherChosen === "true") {
 		$(".title-screen").addClass("display-none");
-		desiredWeather = localStorage.getItem("weather");
+		desiredWeather = sessionStorage.getItem("weather");
 		if (desiredWeather === "sunny") {
 			desiredTemp = "hot";
 		}
@@ -440,23 +440,23 @@ $(document).ready(function() {
 
 		});
 
-		localStorage.clear();
+		sessionStorage.clear();
 
 		if ($(this).attr("data-weather") === "snow" || "rain") {
-			localStorage.setItem("weather", $(this).attr("data-weather"));
+			sessionStorage.setItem("weather", $(this).attr("data-weather"));
 		}
 		else if ($(this).attr("data-weather") === "clear-day" && $(this).attr("data-temp") === "hot") {
-			localStorage.setItem("weather", "sunny");
+			sessionStorage.setItem("weather", "sunny");
 		}
 		else if ($(this).attr("data-weather") === "clear-day" && $(this).attr("data-temp") === "cold") {
-			localStorage.setItem("weather", "temperate");
+			sessionStorage.setItem("weather", "temperate");
 		}
 
 	});
 
 	$(document).on("click", ".pure-button", function() {
 
-		localStorage.setItem("city", $(this).attr("data-name"));
+		sessionStorage.setItem("city", $(this).attr("data-name"));
 
 		for (var i = 0; i < cities.length; i++) {
 			if ($(this).attr("data-name") === cities[i].name) {
@@ -465,8 +465,8 @@ $(document).ready(function() {
 			}
 		}
 
-		localStorage.setItem("latitude", latitude);
-		localStorage.setItem("longitude", longitude);
+		sessionStorage.setItem("latitude", latitude);
+		sessionStorage.setItem("longitude", longitude);
 
 	});
 

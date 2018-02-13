@@ -57,10 +57,11 @@ var loggedIn = 0; //identifies whether user is logged in
 var newUser = 0; //identifies whether user is new
 var userFirstName; //user's first name (to be displayed in header)
 var userCities = []; //user's favorite cities
+var changingTab = 0; //switch to prevent onAuthStateChanged function from running when user backtracks
 
 function loadWeatherImage() {
 
-	var desiredWeather = localStorage.getItem("weather");
+	var desiredWeather = sessionStorage.getItem("weather");
 
 	if (desiredWeather === "snow") {
 		$("#weather-image").attr("src", "assets/images/icon_snowy_70.png");
@@ -506,16 +507,16 @@ function parseNewUserInfo(email, password) {
 }
 
 $(document).ready(function() {
-	currentCity = localStorage.getItem("city");
-	latitude = localStorage.getItem("latitude");
-	longitude = localStorage.getItem("longitude");
+	currentCity = sessionStorage.getItem("city");
+	latitude = sessionStorage.getItem("latitude");
+	longitude = sessionStorage.getItem("longitude");
+	changingTab = 0;
 
 	$(".city").text(currentCity);
 	$("#page2body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
-	$(".rateYo-city").rateYo("option", "readOnly", true);
-
-	if(currentCity.indexOf(userCities) > -1)
-		$(".rateYo-city").rateYo("rating", 5);
+	
+	if(loggedIn === 0)
+		$(".rateYo-city").rateYo("option", "readOnly", true);
 	
 	$(document).on("click", ".info", function(){
 		var value = $(this).attr("value");
@@ -600,18 +601,6 @@ $(document).ready(function() {
 		$("#signup-modal").addClass("display-none");
 	});
 
-	$("#weather-image").on("click", function() {
-		localStorage.setItem("Weather chosen", "false");
-	});
-
-	$("#city-name").on("click", function() {
-		localStorage.setItem("Weather chosen", "true");
-	});
-
-	// $(window).unload(function(){
-	// 	localStorage.clear();
-	// });
-
 	findForecast(latitude, longitude);
 
 	loadWeatherImage();
@@ -671,7 +660,20 @@ $(document).ready(function() {
 		firebase.auth().signOut();
 	});
 
+	$("#weather-image").on("click", function() {
+			changingTab = 1;
+			sessionStorage.setItem("Weather chosen", "false");
+		});
+
+	$("#city-name").on("click", function() {
+			changingTab = 1;
+			sessionStorage.setItem("Weather chosen", "true");
+		});
+
 	firebase.auth().onAuthStateChanged(function(firebaseUser){
+		if(changingTab === 1)
+			return;
+
 		if(firebaseUser) {
 			$("#enter-account").addClass("display-none-important");
 			$("#exit-account").removeClass("display-none-important");
