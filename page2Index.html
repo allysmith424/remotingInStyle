@@ -7,10 +7,10 @@
 	<title>Remote in Style</title>
 
 	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
-	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="assets/css/datepicker.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/jquery.rateyo.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/grid.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/page2Style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -91,8 +91,8 @@
 		</div>
 	</div>
 	<div class="pure-g middle-row">
-		<div class="pure-u-1-24"></div>
-		<div class="pure-u-16-24">
+		<div class="pure-u-lg-1-24"></div>
+		<div class="pure-u-lg-16-24">
 			<header class = "transparent-background">
 				<a href="index.html" id="weather-image-link"><img id = "weather-image"></a>
 				<span class = "rateYo-city"></span>
@@ -125,13 +125,13 @@
 					<div class = "hidden-box-content display-none" id = "event-form">
 						<form>
 							<legend class = "pure-g">
-								<div class = "pure-u-1-24"></div>
-								<div class = "pure-u-23-24">Filter for Awesome and Engaging Events</div>
+								<div class = "pure-u-lg-1-24"></div>
+								<div class = "pure-u-lg-22-24">Filter for Awesome and Engaging Events</div>
 							</legend>
 							<br>
-							<div class = "pure-g">
-								<div class = "pure-u-1-24"></div>
-								<div class = "pure-u-8-24">
+							<div class = "pure-g event-form-body">
+								<div class = "pure-u-lg-1-24"></div>
+								<div class = "pure-u-lg-8-24">
 									<div class = "event-prompt">When Will You Need a Break?</div>
 									<label for = "start-date">Start Date: <span class = "asterisk">*</span></label><br>
 									<input data-toggle = "datepicker" id = "start-date"><br>
@@ -142,23 +142,22 @@
 									<input type = "text" id = "address-event-form"><br>
 									<label for = "maximum-distance">Maxium Distance to Travel (mi):</label><br>
 									<input type = "text" id = "maximum-distance"><br>
-									<div id = "required-fields"><span class = "asterisk">*</span> denotes a required field</div>
-									<div id = "submit-event-form" class="button">Submit</div>
-									<p id = "validation" class = "asterisk"></p>
-	        						<p id = "" class = "display-none asterisk">Distance must be a number greater than zero</p>
 								</div>
-								<div class = "pure-u-2-24">
+								<div class = "pure-u-lg-1-24">
 								</div>
-								<div class = "pure-u-13-24">
+								<div class = "pure-u-lg-13-24" id = "event-categories">
 									<div class = "event-prompt" id = "event-types">What types of events do you like? <span class = "asterisk">*</span></div>
-									<div class = "pure-u-7-24 event-checkboxes">
-										<label><input type = "checkbox" id = "art"> Art</label> <label><input type = "checkbox" id = "books"> Books</label> <label><input type = "checkbox" id = "business"> Business</label> <label><input type = "checkbox" id = "comedy"> Comedy</label> <label><input type = "checkbox" id = "music"> Concerts</label> <label><input type = "checkbox" id = "learning_education"> Education</label> <label><input type = "checkbox" id = "family_fun_kids"> Family</label> 
+									<div class = "pure-u-lg-7-24 event-checkboxes">
+										<label><input type = "checkbox" id = "art"> Art</label> <label><input type = "checkbox" id = "books"> Books</label> <label><input type = "checkbox" id = "business"> Business</label> <label><input type = "checkbox" id = "fundraisers"> Charity</label> <label><input type = "checkbox" id = "comedy"> Comedy</label> <label><input type = "checkbox" id = "music"> Concerts</label> <label><input type = "checkbox" id = "learning_education"> Education</label>
 									</div>
-									<div class = "pure-u-7-24 event-checkboxes">
-										<label><input type = "checkbox" id = "festivals_parades"> Festivals</label> <label><input type = "checkbox" id = "movies_film"> Film</label> <label><input type = "checkbox" id = "food"> Food</label> <label><input type = "checkbox" id = "fundraisers"> Fundraisers</label> <label><input type = "checkbox" id = "support"> Health</label> <label><input type = "checkbox" id = "attractions"> Museums</label> <label><input type = "checkbox" id = "singles_social"> Nightlife</label>
+									<div class = "pure-u-lg-7-24 event-checkboxes">
+										<label><input type = "checkbox" id = "family_fun_kids"> Family</label> <label><input type = "checkbox" id = "festivals_parades"> Festivals</label> <label><input type = "checkbox" id = "movies_film"> Film</label> <label><input type = "checkbox" id = "food"> Food</label> <label><input type = "checkbox" id = "support"> Health</label> <label><input type = "checkbox" id = "attractions"> Museums</label> <label><input type = "checkbox" id = "singles_social"> Nightlife</label>
 									</div>
-									<div class = "pure-u-9-24 event-checkboxes">
+									<div class = "pure-u-lg-9-24 event-checkboxes">
 										<label><input type = "checkbox" id = "outdoors_recreation"> Outdoors</label> <label><input type = "checkbox" id = "performing_arts"> Performances</label> <label><input type = "checkbox" id = "animals"> Pets</label> <label><input type = "checkbox" id = "politics_activism"> Politics</label> <label><input type = "checkbox" id = "religion_spirituality"> Religion</label> <label><input type = "checkbox" id = "sports"> Sports</label> <label><input type = "checkbox" id = "technology"> Technology</label>
+										<div id = "required-fields"><span class = "asterisk">*</span> denotes a required field</div>
+										<div id = "submit-event-form" class="button">Submit</div>
+										<p id = "validation" class = "asterisk"></p>
 									</div>
 								</div>
 							</div>
@@ -174,12 +173,11 @@
 			</div>
 		</div>
 
-		<div class="pure-u-1-24"></div>
-		<div class="pure-u-5-24 transparent-background" id = "forecast">
+		<div class="pure-u-lg-1-24"></div>
+		<div class="pure-u-lg-5-24 transparent-background" id = "forecast">
 			<h2>Seven Day Forecast</h2>
 			<div id="weather-stats"></div>
 		</div>
-		<div class="pure-u-1-24"></div>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
