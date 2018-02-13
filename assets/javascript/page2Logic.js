@@ -4,7 +4,7 @@
 
 var hotelCounter = 0;
 
-var currentCity = "San Francisco"; //REMOVE THIS ONCE WE GET ACCESS TO THE API AGAIN
+var currentCity = "San Francisco"; 
 var latitude;
 var longitude;
 
@@ -57,10 +57,11 @@ var loggedIn = 0; //identifies whether user is logged in
 var newUser = 0; //identifies whether user is new
 var userFirstName; //user's first name (to be displayed in header)
 var userCities = []; //user's favorite cities
+var changingTab = 0; //switch to prevent onAuthStateChanged function from running when user backtracks
 
 function loadWeatherImage() {
 
-	var desiredWeather = localStorage.getItem("weather");
+	var desiredWeather = sessionStorage.getItem("weather");
 
 	if (desiredWeather === "snow") {
 		$("#weather-image").attr("src", "assets/images/icon_snowy_70.png");
@@ -210,12 +211,12 @@ $(function(){
 
 $(function(){
 	$(".rateYo-city").rateYo().on("rateyo.set", function(e, data){
-		if(data.rating === 5) {
+		if(data.rating === 5 && loggedIn === 1) {
 			database.ref("users/" + uid + "/favoriteCities/" + currentCity).update({
 				favorite: "true"
 			});
 		}
-		else {
+		else if(data.rating === 0 && loggedIn === 1) {
 			database.ref("users/" + uid + "/favoriteCities/" + currentCity).update({
 				favorite: null
 			});
@@ -330,58 +331,63 @@ function populateEvents(queryURL, number){
 		dataType: "JSONP",
 		method: "GET"  
 	}).then(function(response){
-		var eventArray = response.events.event;
-		var allEvents = $("<div>");
-		for(var i = 0; i < eventArray.length; i++) {
-			var event = eventArray[i];
-			
-			var eventDiv = $("<div>");
-			eventDiv.addClass("event");
-			
-			var eventInfoDiv = $("<div>");
-			eventInfoDiv.addClass("event-info");
-			eventInfoDiv.append("<a target = '_blank' href='" + event.url + "'><p class = 'event-title'>" + event.title + "</p></a>");
-			
-			var startTime = moment(event.start_time).format('dddd MMM DD, h:mm a');
-			eventInfoDiv.append("<p class='event-start-date'>Starts: " + startTime + "</p>");
-			eventInfoDiv.append("<p class='event-location'><a target = '_blank' href='" + event.venue_url + "'>" + 
-				event.venue_name + "</a> | <a target = '_blank' href='https://www.google.com/maps/search/?api=1&query=" +
-				event.latitude + "," + event.longitude + "'>" + event.venue_address + " " + 
-				event.city_name + ", " + event.region_abbr + "</a></p>");
-			
-			eventDiv.append(eventInfoDiv);
-			if(i % 2 === 0)
-				eventDiv.addClass("event-even");
+		if(response.events != null) {
+			var eventArray = response.events.event;
+			var allEvents = $("<div>");
+			for(var i = 0; i < eventArray.length; i++) {
+				var event = eventArray[i];
+				
+				var eventDiv = $("<div>");
+				eventDiv.addClass("event");
+				
+				var eventInfoDiv = $("<div>");
+				eventInfoDiv.addClass("event-info");
+				eventInfoDiv.append("<a target = '_blank' href='" + event.url + "'><p class = 'event-title'>" + event.title + "</p></a>");
+				
+				var startTime = moment(event.start_time).format('dddd MMM DD, h:mm a');
+				eventInfoDiv.append("<p class='event-start-date'>Starts: " + startTime + "</p>");
+				eventInfoDiv.append("<p class='event-location'><a target = '_blank' href='" + event.venue_url + "'>" + 
+					event.venue_name + "</a> | <a target = '_blank' href='https://www.google.com/maps/search/?api=1&query=" +
+					event.latitude + "," + event.longitude + "'>" + event.venue_address + " " + 
+					event.city_name + ", " + event.region_abbr + "</a></p>");
+				
+				eventDiv.append(eventInfoDiv);
+				if(i % 2 === 0)
+					eventDiv.addClass("event-even");
+				else
+					eventDiv.addClass("event-odd");
+				allEvents.append(eventDiv);
+			}
+
+			$("#event-listings").prepend(allEvents);
+
+			if(parseInt(response.page_number) <= 1)
+				$("#left-arrow").addClass("display-none");
 			else
-				eventDiv.addClass("event-odd");
-			allEvents.append(eventDiv);
+				$("#left-arrow").removeClass("display-none");
+
+			if(response.page_number === response.page_count)
+				$("#right-arrow").addClass("display-none");
+			else
+				$("#right-arrow").removeClass("display-none");
+
+			$("#left-arrow").on("click", function(){
+				$("#left-arrow").unbind("click");
+				$("#right-arrow").unbind("click");
+				$(".event").remove();
+				populateEvents(queryURL, --number);
+			});
+
+			$("#right-arrow").on("click", function(){ 
+				$("#left-arrow").unbind("click");
+				$("#right-arrow").unbind("click");
+				$(".event").remove();
+				populateEvents(queryURL, ++number);	
+			});
 		}
-
-		$("#event-listings").prepend(allEvents);
-
-		if(parseInt(response.page_number) <= 1)
-			$("#left-arrow").addClass("display-none");
-		else
-			$("#left-arrow").removeClass("display-none");
-
-		if(response.page_number === response.page_count)
-			$("#right-arrow").addClass("display-none");
-		else
-			$("#right-arrow").removeClass("display-none");
-
-		$("#left-arrow").on("click", function(){
-			$("#left-arrow").unbind("click");
-			$("#right-arrow").unbind("click");
-			$(".event").remove();
-			populateEvents(queryURL, --number);
-		});
-
-		$("#right-arrow").on("click", function(){ 
-			$("#left-arrow").unbind("click");
-			$("#right-arrow").unbind("click");
-			$(".event").remove();
-			populateEvents(queryURL, ++number);	
-		});
+		else {
+			$("#event-listings").prepend("<p> Sorry, no events can be found</p>");
+		}
 	});
 }
 
@@ -420,15 +426,18 @@ function convertToEventfulDateFormat(dateString){
 	return year + month + day + "00";
 }
 
-// finds 5 hotels within 40km of city
+// finds 10 hotels within 40km of city
 function loadHotels(latitude, longitude) {
 
-	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + latitude + "&longitude=" + longitude + "&radius=40&check_in=2018-02-10&check_out=2018-02-11&number_of_results=5";
-
+	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + 
+	latitude + "&longitude=" + longitude + "&radius=40&check_in=" + todayyy + "-" + todaymm + "-" + 
+	todaydd + "&check_out=" + endyy + "-" + endmm + "-" + enddd + "&number_of_results=10";
+	console.log(queryURL);
 	$.ajax({
 		url: queryURL,
 		method: "GET"
 	}).then(function(response) {
+		console.log(response);
 
 		$(".hotel-name").text(response.results[hotelCounter].property_name);
 
@@ -501,16 +510,16 @@ function parseNewUserInfo(email, password) {
 }
 
 $(document).ready(function() {
-	currentCity = localStorage.getItem("city");
-	latitude = localStorage.getItem("latitude");
-	longitude = localStorage.getItem("longitude");
+	currentCity = sessionStorage.getItem("city");
+	latitude = sessionStorage.getItem("latitude");
+	longitude = sessionStorage.getItem("longitude");
+	changingTab = 0;
 
 	$(".city").text(currentCity);
 	$("#page2body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
-	$(".rateYo-city").rateYo("option", "readOnly", true);
-
-	if(currentCity.indexOf(userCities) > -1)
-		$(".rateYo-city").rateYo("rating", 5);
+	
+	if(loggedIn === 0)
+		$(".rateYo-city").rateYo("option", "readOnly", true);
 	
 	$(document).on("click", ".info", function(){
 		var value = $(this).attr("value");
@@ -548,7 +557,7 @@ $(document).ready(function() {
 
 	$(document).on("click", ".next-btn", function(e) {
 		e.preventDefault();
-		if (hotelCounter < 4) {
+		if (hotelCounter < 9) {
 			hotelCounter++;
 		}
 		else {
@@ -594,18 +603,6 @@ $(document).ready(function() {
 		$("#signup-modal input[type=password]").val("");
 		$("#signup-modal").addClass("display-none");
 	});
-
-	$("#weather-image").on("click", function() {
-		localStorage.setItem("Weather chosen", "false");
-	});
-
-	$("#city-name").on("click", function() {
-		localStorage.setItem("Weather chosen", "true");
-	});
-
-	// $(window).unload(function(){
-	// 	localStorage.clear();
-	// });
 
 	findForecast(latitude, longitude);
 
@@ -666,7 +663,20 @@ $(document).ready(function() {
 		firebase.auth().signOut();
 	});
 
+	$("#weather-image").on("click", function() {
+			changingTab = 1;
+			sessionStorage.setItem("Weather chosen", "false");
+		});
+
+	$("#city-name").on("click", function() {
+			changingTab = 1;
+			sessionStorage.setItem("Weather chosen", "true");
+		});
+
 	firebase.auth().onAuthStateChanged(function(firebaseUser){
+		if(changingTab === 1)
+			return;
+
 		if(firebaseUser) {
 			$("#enter-account").addClass("display-none-important");
 			$("#exit-account").removeClass("display-none-important");
@@ -684,6 +694,7 @@ $(document).ready(function() {
 					if(snapshot.hasChild(currentCity))
 						$(".rateYo-city").rateYo("rating", 5);
 					var cityKeys = snapshot.val();
+					userCities = []; //clear userCities to avoid repeats
 					for(var key in cityKeys)
 						userCities.push(key);
 				});

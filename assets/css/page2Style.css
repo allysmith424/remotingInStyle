@@ -193,7 +193,7 @@ input{
 }
 
 .daily-weather-image {
-	padding: 0 17px;
+	padding: 5px 24px;
 	height: 50px;
 	display: table-cell;
 	vertical-align: middle;
@@ -378,6 +378,11 @@ input{
 	margin-bottom: 3vh;
 	margin-right: 2.5vw;
 	margin-left: 2.5vw;
+}
+
+#event-listings p{
+	text-align: center;
+	font-size: 2.5vw;
 }
 
 #event-listings a{
