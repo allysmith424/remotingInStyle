@@ -4,7 +4,7 @@
 
 var hotelCounter = 0;
 
-var currentCity = "San Francisco"; //REMOVE THIS ONCE WE GET ACCESS TO THE API AGAIN
+var currentCity = "San Francisco"; 
 var latitude;
 var longitude;
 
@@ -211,12 +211,12 @@ $(function(){
 
 $(function(){
 	$(".rateYo-city").rateYo().on("rateyo.set", function(e, data){
-		if(data.rating === 5) {
+		if(data.rating === 5 && loggedIn === 1) {
 			database.ref("users/" + uid + "/favoriteCities/" + currentCity).update({
 				favorite: "true"
 			});
 		}
-		else {
+		else if(data.rating === 0 && loggedIn === 1) {
 			database.ref("users/" + uid + "/favoriteCities/" + currentCity).update({
 				favorite: null
 			});
@@ -331,58 +331,63 @@ function populateEvents(queryURL, number){
 		dataType: "JSONP",
 		method: "GET"  
 	}).then(function(response){
-		var eventArray = response.events.event;
-		var allEvents = $("<div>");
-		for(var i = 0; i < eventArray.length; i++) {
-			var event = eventArray[i];
-			
-			var eventDiv = $("<div>");
-			eventDiv.addClass("event");
-			
-			var eventInfoDiv = $("<div>");
-			eventInfoDiv.addClass("event-info");
-			eventInfoDiv.append("<a target = '_blank' href='" + event.url + "'><p class = 'event-title'>" + event.title + "</p></a>");
-			
-			var startTime = moment(event.start_time).format('dddd MMM DD, h:mm a');
-			eventInfoDiv.append("<p class='event-start-date'>Starts: " + startTime + "</p>");
-			eventInfoDiv.append("<p class='event-location'><a target = '_blank' href='" + event.venue_url + "'>" + 
-				event.venue_name + "</a> | <a target = '_blank' href='https://www.google.com/maps/search/?api=1&query=" +
-				event.latitude + "," + event.longitude + "'>" + event.venue_address + " " + 
-				event.city_name + ", " + event.region_abbr + "</a></p>");
-			
-			eventDiv.append(eventInfoDiv);
-			if(i % 2 === 0)
-				eventDiv.addClass("event-even");
+		if(response.events != null) {
+			var eventArray = response.events.event;
+			var allEvents = $("<div>");
+			for(var i = 0; i < eventArray.length; i++) {
+				var event = eventArray[i];
+				
+				var eventDiv = $("<div>");
+				eventDiv.addClass("event");
+				
+				var eventInfoDiv = $("<div>");
+				eventInfoDiv.addClass("event-info");
+				eventInfoDiv.append("<a target = '_blank' href='" + event.url + "'><p class = 'event-title'>" + event.title + "</p></a>");
+				
+				var startTime = moment(event.start_time).format('dddd MMM DD, h:mm a');
+				eventInfoDiv.append("<p class='event-start-date'>Starts: " + startTime + "</p>");
+				eventInfoDiv.append("<p class='event-location'><a target = '_blank' href='" + event.venue_url + "'>" + 
+					event.venue_name + "</a> | <a target = '_blank' href='https://www.google.com/maps/search/?api=1&query=" +
+					event.latitude + "," + event.longitude + "'>" + event.venue_address + " " + 
+					event.city_name + ", " + event.region_abbr + "</a></p>");
+				
+				eventDiv.append(eventInfoDiv);
+				if(i % 2 === 0)
+					eventDiv.addClass("event-even");
+				else
+					eventDiv.addClass("event-odd");
+				allEvents.append(eventDiv);
+			}
+
+			$("#event-listings").prepend(allEvents);
+
+			if(parseInt(response.page_number) <= 1)
+				$("#left-arrow").addClass("display-none");
 			else
-				eventDiv.addClass("event-odd");
-			allEvents.append(eventDiv);
+				$("#left-arrow").removeClass("display-none");
+
+			if(response.page_number === response.page_count)
+				$("#right-arrow").addClass("display-none");
+			else
+				$("#right-arrow").removeClass("display-none");
+
+			$("#left-arrow").on("click", function(){
+				$("#left-arrow").unbind("click");
+				$("#right-arrow").unbind("click");
+				$(".event").remove();
+				populateEvents(queryURL, --number);
+			});
+
+			$("#right-arrow").on("click", function(){ 
+				$("#left-arrow").unbind("click");
+				$("#right-arrow").unbind("click");
+				$(".event").remove();
+				populateEvents(queryURL, ++number);	
+			});
 		}
-
-		$("#event-listings").prepend(allEvents);
-
-		if(parseInt(response.page_number) <= 1)
-			$("#left-arrow").addClass("display-none");
-		else
-			$("#left-arrow").removeClass("display-none");
-
-		if(response.page_number === response.page_count)
-			$("#right-arrow").addClass("display-none");
-		else
-			$("#right-arrow").removeClass("display-none");
-
-		$("#left-arrow").on("click", function(){
-			$("#left-arrow").unbind("click");
-			$("#right-arrow").unbind("click");
-			$(".event").remove();
-			populateEvents(queryURL, --number);
-		});
-
-		$("#right-arrow").on("click", function(){ 
-			$("#left-arrow").unbind("click");
-			$("#right-arrow").unbind("click");
-			$(".event").remove();
-			populateEvents(queryURL, ++number);	
-		});
+		else {
+			$("#event-listings").prepend("<p> Sorry, no events can be found</p>");
+		}
 	});
 }
 
@@ -685,6 +690,7 @@ $(document).ready(function() {
 					if(snapshot.hasChild(currentCity))
 						$(".rateYo-city").rateYo("rating", 5);
 					var cityKeys = snapshot.val();
+					userCities = []; //clear userCities to avoid repeats
 					for(var key in cityKeys)
 						userCities.push(key);
 				});

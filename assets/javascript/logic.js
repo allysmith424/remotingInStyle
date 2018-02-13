@@ -380,6 +380,8 @@ $(document).ready(function() {
 
 	$(".weather-icon").on("click", function() {
 
+		$(".weather-icon").unbind("click");
+		
 		matchingCities = [];
 
 		desiredWeather = $(this).attr("data-weather");
