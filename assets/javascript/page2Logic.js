@@ -57,6 +57,7 @@ var loggedIn = 0; //identifies whether user is logged in
 var newUser = 0; //identifies whether user is new
 var userFirstName; //user's first name (to be displayed in header)
 var userCities = []; //user's favorite cities
+var userHotels = [];
 var changingTab = 0; //switch to prevent onAuthStateChanged function from running when user backtracks
 
 function loadWeatherImage() {
@@ -97,20 +98,21 @@ function findForecast(latitude, longitude) {
 			else
 				weatherDay.addClass("weather-day");
 
+			var dayAndDateDiv = $("<div>");
 			var dayAndDate = $("<span>");
-			dayAndDate.addClass("day-and-date");
+			dayAndDateDiv.addClass("day-and-date");
 			var day = $("<span>");
 			day.addClass("day");
 				if (i === 0) {
-					day.append("Today<br>");
+					day.append("Tod.<br>");
 				}
 				else if (i === 1) {
-					day.append("Tomorrow<br>");
+					day.append("Tom.<br>");
 				}
 				else {
 					var today = moment();
 					today.add(i, "days");
-					day.append(today.format("dddd")).append("<br>");
+					day.append(today.format("ddd")).append("<br>");
 				}
 			var date = $("<span>");
 			date.addClass("date");
@@ -118,24 +120,26 @@ function findForecast(latitude, longitude) {
 				today.add(i, "days");
 				date.append(today.format("MMM D"));
 
-			dayAndDate.append(day, date)
+			dayAndDateDiv.append(day, date)
 
-			var dailyWeatherImage = $("<img>");
-			dailyWeatherImage.addClass("daily-weather-image");
+			var weatherImageDiv = $("<div>");
+			var weatherImage = $("<img>");
+			weatherImageDiv.addClass("daily-weather-image");
 			if ((response.daily.data[i].icon === "rain") || (response.daily.data[i].precipType === "rain" && response.daily.data[i].precipProbability > 0.3)) {
-				dailyWeatherImage.attr("src", "assets/images/icon_rainy_70.png");
+				weatherImage.attr("src", "assets/images/icon_rainy_70.png");
 			}
 			else if ((response.daily.data[i].icon === "snow") || (response.daily.data[i].precipType === "snow" && response.daily.data[i].precipProbability > 0.3)) {
-				dailyWeatherImage.attr("src", "assets/images/icon_snowy_70.png");
+				weatherImage.attr("src", "assets/images/icon_snowy_70.png");
 			}
 			else if ((response.daily.data[i].icon === "partly-cloudy-day" || response.daily.data[i].icon === "partly-cloudy-night" || response.daily.data[i].icon === "wind" || response.daily.data[i].icon === "fog" || response.daily.data[i].icon === "clear-day" || response.daily.data[i].icon === "cloudy") && (response.daily.data[i].temperatureHigh < 70)) {
-					dailyWeatherImage.attr("src", "assets/images/icon_overcast_70.png");
+					weatherImage.attr("src", "assets/images/icon_overcast_70.png");
 			}
 			else if ((response.daily.data[i].icon === "partly-cloudy-day" || response.daily.data[i].icon === "partly-cloudy-night" || response.daily.data[i].icon === "wind" ||
 				response.daily.data[i].icon === "fog" ||response.daily.data[i].icon === "clear-day" || response.daily.data[i].icon === "cloudy") && (response.daily.data[i].temperatureHigh > 70)) {
-					dailyWeatherImage.attr("src", "assets/images/icon_sunny_70.png");
+					weatherImage.attr("src", "assets/images/icon_sunny_70.png");
 			}		
 
+			weatherImageDiv.append(weatherImage);
 			var temperatures = $("<span>");
 			temperatures.addClass("temperatures");
 			var tempHigh = $("<span>");
@@ -147,7 +151,7 @@ function findForecast(latitude, longitude) {
 
 			temperatures.append(tempHigh, tempLow);
 
-			weatherDay.append(dayAndDate, dailyWeatherImage, temperatures);
+			weatherDay.append(dayAndDateDiv, weatherImageDiv, temperatures);
 
 			$("#weather-stats").append(weatherDay);
 
@@ -200,12 +204,12 @@ $(function() {
 	});
 });
 
-//Initializes "add to favorites" star
+//Initializes "add to city favorites" star
 $(function(){
 	$(".rateYo-city").rateYo({
 		numStars: 1,
 		fullStar: true,
-		starWidth: "40px",
+		starWidth: "40px"
 	});
 });
 
@@ -220,6 +224,35 @@ $(function(){
 			database.ref("users/" + uid + "/favoriteCities/" + currentCity).update({
 				favorite: null
 			});
+		}
+	});
+});
+
+//Initializes "add to hotel favorites" star
+$(function(){
+	$(".rateYo-hotel").rateYo({
+		numStars: 1,
+		fullStar: true,
+		starWidth: "40px"
+	});
+});
+
+$(function(){
+	$(".rateYo-hotel").rateYo().on("rateyo.set", function(e, data){
+		var propertyCode = $(".hotel-name").attr("property_code");
+		var name = $(".hotel-name").text();
+		var address = $(".hotel-address").text();
+		var number = $("#hotel-number").text();
+
+		if(data.rating === 5 && loggedIn === 1) {
+			database.ref("users/" + uid + "/favoriteHotels/" + currentCity + "/" + propertyCode).update({
+				name: name,
+				address: address,
+				number: number
+			});
+		}
+		else if(data.rating === 0 && loggedIn === 1) {
+			database.ref("users/" + uid + "/favoriteHotels/" + currentCity).child(propertyCode).remove();
 		}
 	});
 });
@@ -428,26 +461,41 @@ function convertToEventfulDateFormat(dateString){
 
 // finds 10 hotels within 40km of city
 function loadHotels(latitude, longitude) {
-
 	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + 
 	latitude + "&longitude=" + longitude + "&radius=40&check_in=" + todayyy + "-" + todaymm + "-" + 
 	todaydd + "&check_out=" + endyy + "-" + endmm + "-" + enddd + "&number_of_results=10";
-	console.log(queryURL);
 	$.ajax({
 		url: queryURL,
 		method: "GET"
 	}).then(function(response) {
-		console.log(response);
-
 		$(".hotel-name").text(response.results[hotelCounter].property_name);
-
+		$(".hotel-name").attr("property_code", response.results[hotelCounter].property_code);
 		$(".hotel-address").append(response.results[hotelCounter].address.line1).append("<br>").append(response.results[hotelCounter].address.city).append("<br>").append(response.results[hotelCounter].address.postal_code);
-
-		$(".hotel-website").append("<a href='" + response.results[hotelCounter]._links.href + "'>Website</a>");
-
+		$(".hotel-number").append("Phone: <span id = 'hotel-number'>" + response.results[hotelCounter].contacts[0].detail + "</span>");
+		$(".rateYo-hotel").removeClass("display-none");
+		if(isHotelFavorited() === true) {
+			$(".rateYo-hotel").rateYo("rating", 5);
+		}
+		else {
+			$(".rateYo-hotel").rateYo("rating", 0);
+		}
 	});
 
 };
+
+function isHotelFavorited() {
+	var propertyCode = $(".hotel-name").attr("property_code");
+
+	for(var i = 0; i < userHotels.length; i++) {
+		if(userHotels[i].city === currentCity) {
+			for(var j = 0; j < userHotels[i].hotels.length; j++) {
+				if(userHotels[i].hotels[j].property === propertyCode)
+					return true;
+			}
+		}
+	}
+	return false;
+}
 
 // validates email user enters to create an account
 function validateEmail(string) {
@@ -518,8 +566,10 @@ $(document).ready(function() {
 	$(".city").text(currentCity);
 	$("#page2body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
 	
-	if(loggedIn === 0)
+	if(loggedIn === 0) {
 		$(".rateYo-city").rateYo("option", "readOnly", true);
+		$(".rateYo-hotel").rateYo("option", "readOnly", true);
+	}
 	
 	$(document).on("click", ".info", function(){
 		var value = $(this).attr("value");
@@ -550,20 +600,22 @@ $(document).ready(function() {
 			$(".event").remove();
 
 		if (value === "hotels") {
-			$(".hotel-name, .hotel-address, .hotel-website").empty();
+			$(".hotel-name, .hotel-address, .hotel-number").empty();
+			$(".rateYo-hotel").addClass("display-none");
 			loadHotels(latitude, longitude);
 		}
 	});
 
 	$(document).on("click", ".next-btn", function(e) {
 		e.preventDefault();
+		$(".rateYo-hotel").addClass("display-none");
 		if (hotelCounter < 9) {
 			hotelCounter++;
 		}
 		else {
 			hotelCounter = 0;
 		}
-		$(".hotel-name, .hotel-address, .hotel-website").empty();
+		$(".hotel-name, .hotel-address, .hotel-number").empty();
 		loadHotels(latitude, longitude);
 	});
 
@@ -683,20 +735,13 @@ $(document).ready(function() {
 			$("#login-modal").addClass("display-none");
 			$("#new-user-info-modal").addClass("display-none");
 			$(".rateYo-city").rateYo("option", "readOnly", false);
+			$(".rateYo-hotel").rateYo("option", "readOnly", false);
 			loggedIn = 1;
 			uid = firebaseUser.uid;
 			if(newUser === 0) {
 				database.ref("/users/" + uid).on("value", function(snapshot){
 					userFirstName = snapshot.val().firstName;
 					$("#user-name").text(userFirstName);
-				});
-				database.ref("/users/" + uid + "/favoriteCities").on("value", function(snapshot){
-					if(snapshot.hasChild(currentCity))
-						$(".rateYo-city").rateYo("rating", 5);
-					var cityKeys = snapshot.val();
-					userCities = []; //clear userCities to avoid repeats
-					for(var key in cityKeys)
-						userCities.push(key);
 				});
 			}
 			else {
@@ -713,7 +758,39 @@ $(document).ready(function() {
 					state: userState
 				});
 				$("#user-name").text(userFirstName);
+				if(divOpened === "hotels" && isHotelFavorited() === true)
+					$(".rateYo-hotel").rateYo("rating", 5);
 			}
+			//initializes array of cities and hotels that the user previously liked and sets up event listeners
+			database.ref("/users/" + uid + "/favoriteCities").on("value", function(snapshot){
+				if(snapshot.hasChild(currentCity))
+					$(".rateYo-city").rateYo("rating", 5);
+				var cityKeys = snapshot.val();
+				userCities = []; //clear userCities to avoid repeats
+				for(var key in cityKeys)
+					userCities.push(key);
+			});
+			database.ref("/users/" + uid + "/favoriteHotels").on("value", function(snapshot){
+				var hotelObject = snapshot.val();
+				if(hotelObject === null)
+					return;
+				userHotels = [];
+				for(var city in hotelObject) {
+					var obj = {};
+					obj["city"] = city;
+					var hotelArray = [];
+					for(var property in hotelObject[city]) {
+						var hotelObj = {};
+						hotelObj["property"] = property;
+						hotelObj["address"] = hotelObject[city][property].address;
+						hotelObj["number"] = hotelObject[city][property].number;
+						hotelObj["name"] = hotelObject[city][property].name;
+						hotelArray.push(hotelObj);
+					}
+					obj["hotels"] = hotelArray;
+					userHotels.push(obj);
+				}
+			});
 		}
 		else {
 			newUser = 0;
@@ -722,6 +799,8 @@ $(document).ready(function() {
 			userCities = [];
 			$(".rateYo-city").rateYo("option", "readOnly", true);
 			$(".rateYo-city").rateYo("rating", 0);
+			$(".rateYo-hotel").rateYo("option", "readOnly", true);
+			$(".rateYo-hotel").rateYo("rating", 0);
 			$("#enter-account").removeClass("display-none-important");
 			$("#exit-account").addClass("display-none-important");
 		}

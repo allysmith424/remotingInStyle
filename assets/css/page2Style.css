@@ -28,7 +28,7 @@ header{
 
 h1{
 	font-family: "affectionately_yoursregular";
-	font-size: 4.2vw;
+	font-size: 55px;
 	font-weight: 600;
 	display: table-cell;
 }
@@ -37,20 +37,20 @@ h2{
 	padding-top: 2vh;
 	padding-bottom: 1vh;
 	font-family: "affectionately_yoursregular";
-	font-size: 2.8vw;
+	font-size: 35px;
 	text-align: center;
 }
 
 h3{
 	font-family: "affectionately_yoursregular";
-	font-size: 2.6vw;
+	font-size: 40px;
 	text-align: center;
 	background: rgba(224, 156, 20, .8);
 }
 
 h4{
 	font-family: "affectionately_yoursregular";
-	font-size: 3.9vw;
+	font-size: 50px;
 	text-align: center;
 }
 
@@ -60,14 +60,8 @@ input{
 
 .rateYo-city{
 	display: table-cell;
-	padding-left: 2.3vw;
-	padding-right: 1.3vw;
-}
-
-.close-button{
-	width: 2.5vw;
-	height: auto;
-	margin-right: .2vw;
+	margin-left: 10px;
+	padding-right: 15px;
 }
 
 #new-user-info-modal{
@@ -78,10 +72,10 @@ input{
 .login-modal-formatting{
 	position: absolute;
 	z-index: 1;
-	left: 25%;
+	left: 20%;
 	top: 35%;
 	background-image: url("../images/dust_scratches.jpg");
-	width: 50%;
+	width: 60%;
 	overflow: auto;
 	border: 2px solid black;
 	font-family: "Nunito"; 
@@ -91,7 +85,7 @@ input{
 
 .login-modal-formatting form{
 	font-family: "Nunito";
-	font-size: 1.3vw;
+	font-size: 20px;
 }
 
 .login-modal-formatting h3{
@@ -103,11 +97,13 @@ input{
 .login-modal-formatting input, .login-modal-formatting select{
 	margin-top: 1vh;
 	margin-bottom: 1.5vh;
-	width: 40%;
+	width: 60%;
+	height: 24px;
+	font-size: 20px;
 }
 
 .login-modal-formatting .button{
-	width: 15%;
+	width: 28%;
 	margin-top: 1.5vh;
 	margin-bottom: 1vh;
 }
@@ -193,10 +189,16 @@ input{
 }
 
 .daily-weather-image {
-	padding: 5px 24px;
-	height: 50px;
+	margin-left: 3vw;
 	display: table-cell;
 	vertical-align: middle;
+}
+
+.daily-weather-image img{
+	width: 58%;
+	height: auto;
+	display: block;
+	margin: auto;
 }
 
 .temperatures {
@@ -280,7 +282,7 @@ input{
 }
 
 #weather-image{
-	width: 4vw;
+	width: 50px;
 	position: relative;
 	top: 1vh;
 	left: 1vw;
@@ -288,7 +290,7 @@ input{
 }
 
 .close-button{
-	width: 3vw;
+	width: 40px;
 	height: auto;
 	float: right;
 	margin-top: .4vh;
@@ -329,11 +331,12 @@ input{
 	font-size: 15px;
 	font-weight: 400;
 	margin-bottom: 0;
+	margin-top: 3vh;
 }
 
 #submit-event-form{
-	margin-right: 13vw;
-	margin-top: 4vh;
+	margin-right: 3vw;
+	margin-top: 1vh;
 	margin-bottom: 1.5vh;
 }
 
@@ -478,6 +481,124 @@ input{
 	font-size: 1.5vw;
 }
 
-.hotel-website {
-	color: #777;
+.rateYo-hotel{
+	position: absolute;
+	top: 79%;
+	left: 73%;
+}
+
+@media(max-width: 1075px) {
+	h2 {
+		font-size: 30px;
+	}
+}
+
+@media(max-width: 1024px) {
+	body{
+		height: 120vh;
+	}
+
+	h2 {
+		display: none;
+	}
+
+	header{
+		width: 90%;
+	}
+
+	form .event-form-body{
+		margin-left: 3.5vw;
+	}
+
+	form legend div{
+		margin-left: 3.5vw;
+	}
+
+	#submit-event-form {
+		width: 18%;
+	}
+
+	#main-content{
+		width: 100%;
+		height: 65vh;
+	}
+
+	#forecast{
+		height: auto;
+		padding-top: 2vh;
+		padding-bottom: 2vh;
+		display: table-row;
+		position: absolute;
+		bottom: -20vh
+	}
+
+	.hidden-box-content{
+		margin-top: 2vh;
+	}
+
+	.weather-day, .last-weather-day{
+		display: table-cell;
+		table-layout: fixed;
+		border: 1px solid black;
+		height: auto;
+	}
+
+	.daily-weather-image{
+		width: auto;
+	}
+
+	.weather-day img, .last-weather-day img{
+		width: 45%;
+		float: right;
+		padding-right: 1vw;
+	}
+
+	.day-and-date {
+		padding-left: 1vw;
+	}
+
+	.day{
+		font-size: 14px;
+	}
+
+	.date{
+		font-size: 14px;
+	}
+
+	.temperatures{
+		font-size: 14px;
+		float: right;
+		margin-top: 1.5vh;
+	}
+
+	#event-types{
+		margin-top: 2.5vh;
+	}
+
+@media(max-width: 660px) {
+	
+	body{
+		height: 130vh;
+	}
+
+	#forecast{
+		position: absolute;
+		bottom: -30vh;
+	}
+
+	h1{
+		font-size: 40px;
+	}
+
+	h4{
+		font-size: 35px;
+	}
+
+	#menu-heading{
+		display: none;
+	}
+
+	#custom-menu{
+		font-size: 15px;
+	}
 }
