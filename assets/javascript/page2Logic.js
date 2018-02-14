@@ -203,7 +203,7 @@ $(function() {
 	});
 });
 
-//Initializes "add to favorites" star
+//Initializes "add to city favorites" star
 $(function(){
 	$(".rateYo-city").rateYo({
 		numStars: 1,
@@ -431,7 +431,6 @@ function convertToEventfulDateFormat(dateString){
 
 // finds 10 hotels within 40km of city
 function loadHotels(latitude, longitude) {
-
 	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + 
 	latitude + "&longitude=" + longitude + "&radius=40&check_in=" + todayyy + "-" + todaymm + "-" + 
 	todaydd + "&check_out=" + endyy + "-" + endmm + "-" + enddd + "&number_of_results=10";
@@ -446,7 +445,7 @@ function loadHotels(latitude, longitude) {
 
 		$(".hotel-address").append(response.results[hotelCounter].address.line1).append("<br>").append(response.results[hotelCounter].address.city).append("<br>").append(response.results[hotelCounter].address.postal_code);
 
-		$(".hotel-website").append("<a href='" + response.results[hotelCounter]._links.href + "'>Website</a>");
+		$(".hotel-number").append("Phone: " + response.results[hotelCounter].contacts[0].detail);
 
 	});
 
@@ -553,7 +552,7 @@ $(document).ready(function() {
 			$(".event").remove();
 
 		if (value === "hotels") {
-			$(".hotel-name, .hotel-address, .hotel-website").empty();
+			$(".hotel-name, .hotel-address, .hotel-number").empty();
 			loadHotels(latitude, longitude);
 		}
 	});
@@ -566,7 +565,7 @@ $(document).ready(function() {
 		else {
 			hotelCounter = 0;
 		}
-		$(".hotel-name, .hotel-address, .hotel-website").empty();
+		$(".hotel-name, .hotel-address, .hotel-number").empty();
 		loadHotels(latitude, longitude);
 	});
 

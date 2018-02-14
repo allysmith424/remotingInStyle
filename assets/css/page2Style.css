@@ -481,11 +481,6 @@ input{
 	font-size: 1.5vw;
 }
 
-.hotel-website:hover {
-	text-decoration: underline;
-	cursor: pointer;
-}
-
 @media(max-width: 1075px) {
 	h2 {
 		font-size: 30px;
