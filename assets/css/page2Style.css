@@ -481,6 +481,12 @@ input{
 	font-size: 1.5vw;
 }
 
+.rateYo-hotel{
+	position: absolute;
+	top: 79%;
+	left: 73%;
+}
+
 @media(max-width: 1075px) {
 	h2 {
 		font-size: 30px;

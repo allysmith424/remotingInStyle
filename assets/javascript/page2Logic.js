@@ -57,6 +57,7 @@ var loggedIn = 0; //identifies whether user is logged in
 var newUser = 0; //identifies whether user is new
 var userFirstName; //user's first name (to be displayed in header)
 var userCities = []; //user's favorite cities
+var userHotels = [];
 var changingTab = 0; //switch to prevent onAuthStateChanged function from running when user backtracks
 
 function loadWeatherImage() {
@@ -208,7 +209,7 @@ $(function(){
 	$(".rateYo-city").rateYo({
 		numStars: 1,
 		fullStar: true,
-		starWidth: "40px",
+		starWidth: "40px"
 	});
 });
 
@@ -223,6 +224,35 @@ $(function(){
 			database.ref("users/" + uid + "/favoriteCities/" + currentCity).update({
 				favorite: null
 			});
+		}
+	});
+});
+
+//Initializes "add to hotel favorites" star
+$(function(){
+	$(".rateYo-hotel").rateYo({
+		numStars: 1,
+		fullStar: true,
+		starWidth: "40px"
+	});
+});
+
+$(function(){
+	$(".rateYo-hotel").rateYo().on("rateyo.set", function(e, data){
+		var propertyCode = $(".hotel-name").attr("property_code");
+		var name = $(".hotel-name").text();
+		var address = $(".hotel-address").text();
+		var number = $("#hotel-number").text();
+
+		if(data.rating === 5 && loggedIn === 1) {
+			database.ref("users/" + uid + "/favoriteHotels/" + currentCity + "/" + propertyCode).update({
+				name: name,
+				address: address,
+				number: number
+			});
+		}
+		else if(data.rating === 0 && loggedIn === 1) {
+			database.ref("users/" + uid + "/favoriteHotels/" + currentCity).child(propertyCode).remove();
 		}
 	});
 });
@@ -434,22 +464,38 @@ function loadHotels(latitude, longitude) {
 	var queryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=iD5zJSk96ckruurDP9FraQIVA5ROplcG&latitude=" + 
 	latitude + "&longitude=" + longitude + "&radius=40&check_in=" + todayyy + "-" + todaymm + "-" + 
 	todaydd + "&check_out=" + endyy + "-" + endmm + "-" + enddd + "&number_of_results=10";
-	console.log(queryURL);
 	$.ajax({
 		url: queryURL,
 		method: "GET"
 	}).then(function(response) {
-		console.log(response);
-
 		$(".hotel-name").text(response.results[hotelCounter].property_name);
-
+		$(".hotel-name").attr("property_code", response.results[hotelCounter].property_code);
 		$(".hotel-address").append(response.results[hotelCounter].address.line1).append("<br>").append(response.results[hotelCounter].address.city).append("<br>").append(response.results[hotelCounter].address.postal_code);
-
-		$(".hotel-number").append("Phone: " + response.results[hotelCounter].contacts[0].detail);
-
+		$(".hotel-number").append("Phone: <span id = 'hotel-number'>" + response.results[hotelCounter].contacts[0].detail + "</span>");
+		$(".rateYo-hotel").removeClass("display-none");
+		if(isHotelFavorited() === true) {
+			$(".rateYo-hotel").rateYo("rating", 5);
+		}
+		else {
+			$(".rateYo-hotel").rateYo("rating", 0);
+		}
 	});
 
 };
+
+function isHotelFavorited() {
+	var propertyCode = $(".hotel-name").attr("property_code");
+
+	for(var i = 0; i < userHotels.length; i++) {
+		if(userHotels[i].city === currentCity) {
+			for(var j = 0; j < userHotels[i].hotels.length; j++) {
+				if(userHotels[i].hotels[j].property === propertyCode)
+					return true;
+			}
+		}
+	}
+	return false;
+}
 
 // validates email user enters to create an account
 function validateEmail(string) {
@@ -520,8 +566,10 @@ $(document).ready(function() {
 	$(".city").text(currentCity);
 	$("#page2body").css("background-image", "url('https://source.unsplash.com/" + documentWidth + "x" + documentHeight + "/?" + currentCity + "')");
 	
-	if(loggedIn === 0)
+	if(loggedIn === 0) {
 		$(".rateYo-city").rateYo("option", "readOnly", true);
+		$(".rateYo-hotel").rateYo("option", "readOnly", true);
+	}
 	
 	$(document).on("click", ".info", function(){
 		var value = $(this).attr("value");
@@ -553,12 +601,14 @@ $(document).ready(function() {
 
 		if (value === "hotels") {
 			$(".hotel-name, .hotel-address, .hotel-number").empty();
+			$(".rateYo-hotel").addClass("display-none");
 			loadHotels(latitude, longitude);
 		}
 	});
 
 	$(document).on("click", ".next-btn", function(e) {
 		e.preventDefault();
+		$(".rateYo-hotel").addClass("display-none");
 		if (hotelCounter < 9) {
 			hotelCounter++;
 		}
@@ -685,20 +735,13 @@ $(document).ready(function() {
 			$("#login-modal").addClass("display-none");
 			$("#new-user-info-modal").addClass("display-none");
 			$(".rateYo-city").rateYo("option", "readOnly", false);
+			$(".rateYo-hotel").rateYo("option", "readOnly", false);
 			loggedIn = 1;
 			uid = firebaseUser.uid;
 			if(newUser === 0) {
 				database.ref("/users/" + uid).on("value", function(snapshot){
 					userFirstName = snapshot.val().firstName;
 					$("#user-name").text(userFirstName);
-				});
-				database.ref("/users/" + uid + "/favoriteCities").on("value", function(snapshot){
-					if(snapshot.hasChild(currentCity))
-						$(".rateYo-city").rateYo("rating", 5);
-					var cityKeys = snapshot.val();
-					userCities = []; //clear userCities to avoid repeats
-					for(var key in cityKeys)
-						userCities.push(key);
 				});
 			}
 			else {
@@ -715,7 +758,39 @@ $(document).ready(function() {
 					state: userState
 				});
 				$("#user-name").text(userFirstName);
+				if(divOpened === "hotels" && isHotelFavorited() === true)
+					$(".rateYo-hotel").rateYo("rating", 5);
 			}
+			//initializes array of cities and hotels that the user previously liked and sets up event listeners
+			database.ref("/users/" + uid + "/favoriteCities").on("value", function(snapshot){
+				if(snapshot.hasChild(currentCity))
+					$(".rateYo-city").rateYo("rating", 5);
+				var cityKeys = snapshot.val();
+				userCities = []; //clear userCities to avoid repeats
+				for(var key in cityKeys)
+					userCities.push(key);
+			});
+			database.ref("/users/" + uid + "/favoriteHotels").on("value", function(snapshot){
+				var hotelObject = snapshot.val();
+				if(hotelObject === null)
+					return;
+				userHotels = [];
+				for(var city in hotelObject) {
+					var obj = {};
+					obj["city"] = city;
+					var hotelArray = [];
+					for(var property in hotelObject[city]) {
+						var hotelObj = {};
+						hotelObj["property"] = property;
+						hotelObj["address"] = hotelObject[city][property].address;
+						hotelObj["number"] = hotelObject[city][property].number;
+						hotelObj["name"] = hotelObject[city][property].name;
+						hotelArray.push(hotelObj);
+					}
+					obj["hotels"] = hotelArray;
+					userHotels.push(obj);
+				}
+			});
 		}
 		else {
 			newUser = 0;
@@ -724,6 +799,8 @@ $(document).ready(function() {
 			userCities = [];
 			$(".rateYo-city").rateYo("option", "readOnly", true);
 			$(".rateYo-city").rateYo("rating", 0);
+			$(".rateYo-hotel").rateYo("option", "readOnly", true);
+			$(".rateYo-hotel").rateYo("rating", 0);
 			$("#enter-account").removeClass("display-none-important");
 			$("#exit-account").addClass("display-none-important");
 		}
