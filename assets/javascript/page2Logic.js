@@ -4,9 +4,9 @@
 
 var hotelCounter = 0;
 
-var currentCity = "San Francisco"; 
-var latitude = "37.7749";
-var longitude = "-122.4194";
+var currentCity; 
+var latitude;
+var longitude;
 
 var daysShown = 7;
 
@@ -558,9 +558,9 @@ function parseNewUserInfo(email, password) {
 }
 
 $(document).ready(function() {
-	// currentCity = sessionStorage.getItem("city");
-	// latitude = sessionStorage.getItem("latitude");
-	// longitude = sessionStorage.getItem("longitude");
+	currentCity = sessionStorage.getItem("city");
+	latitude = sessionStorage.getItem("latitude");
+	longitude = sessionStorage.getItem("longitude");
 	changingTab = 0;
 
 	$(".city").text(currentCity);
