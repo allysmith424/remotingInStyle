@@ -470,6 +470,11 @@ $(document).ready(function() {
 
 	});
 
+	$("#back-to-weather").on("click", function() {
+		$(".button-screen").addClass("display-none");
+		$(".weather-screen").removeClass("display-none");
+	});
+
 });
 
 

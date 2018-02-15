@@ -5,8 +5,8 @@
 var hotelCounter = 0;
 
 var currentCity = "San Francisco"; 
-var latitude;
-var longitude;
+var latitude = "37.7749";
+var longitude = "-122.4194";
 
 var daysShown = 7;
 
@@ -558,9 +558,9 @@ function parseNewUserInfo(email, password) {
 }
 
 $(document).ready(function() {
-	currentCity = sessionStorage.getItem("city");
-	latitude = sessionStorage.getItem("latitude");
-	longitude = sessionStorage.getItem("longitude");
+	// currentCity = sessionStorage.getItem("city");
+	// latitude = sessionStorage.getItem("latitude");
+	// longitude = sessionStorage.getItem("longitude");
 	changingTab = 0;
 
 	$(".city").text(currentCity);
@@ -713,6 +713,11 @@ $(document).ready(function() {
 
 	$(document).on("click", "#log-out", function(){
 		firebase.auth().signOut();
+	});
+
+	$("#back-to-index-button").on("click", function() {
+		sessionStorage.setItem("Weather chosen", "false");
+		changingTab = 1;
 	});
 
 	$("#weather-image").on("click", function() {

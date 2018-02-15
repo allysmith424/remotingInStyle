@@ -25,6 +25,20 @@ body{
 	margin: 10px;
 }
 
+#pick-destination {
+	text-align: left;
+}
+
+#back-to-weather {
+	color: #777;
+	font-size: 16px;
+	text-align: left;
+}
+
+#back-to-weather:hover {
+	color: lime;
+}
+
 .formatted {
 	height: 50vh;
 	margin: 100px;

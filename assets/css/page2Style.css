@@ -281,11 +281,27 @@ input{
 	height: 92%;
 }
 
+#back-to-index-button {
+	display: block;
+	border: none;
+	background: rgba(0, 0, 0, 0);
+	font-size: 15px;
+}
+
+#back-to-index-button a {
+	color: #777;
+}
+
+#back-to-index-button a:hover {
+	color: #ff3845;
+}
+
 #weather-image{
 	width: 50px;
 	position: relative;
 	top: 1vh;
 	left: 1vw;
+	margin-right: 1vw;
 	display: table-cell;
 }
 
@@ -478,7 +494,7 @@ input{
 	left: 35%;
 	font-family: "Nunito";
 	line-height: 1.5;
-	font-size: 1.5vw;
+	font-size: 2vw;
 }
 
 .rateYo-hotel{
@@ -590,6 +606,10 @@ input{
 		font-size: 40px;
 	}
 
+	#back-to-index-button {
+		font-size: 10px;
+	}
+
 	h4{
 		font-size: 35px;
 	}
@@ -600,5 +620,8 @@ input{
 
 	#custom-menu{
 		font-size: 15px;
+	}
+	.hotel-info{ 
+		font-size: 4vw;
 	}
 }
