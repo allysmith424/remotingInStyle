@@ -418,7 +418,7 @@ $(document).ready(function() {
 	});
 
 
-	$(".weather-icon").on("click", function() {
+	$(document).on("click", ".weather-icon", function() {
 
 		$(".weather-icon").unbind("click");
 		
@@ -431,6 +431,8 @@ $(document).ready(function() {
 		matchWeatherType();
 
 		$(document).ajaxStop(function() {
+
+			$(".city-button").empty();
 
 			$(".weather-screen").addClass("display-none");
 
@@ -473,6 +475,7 @@ $(document).ready(function() {
 	$("#back-to-weather").on("click", function() {
 		$(".button-screen").addClass("display-none");
 		$(".weather-screen").removeClass("display-none");
+		$(".weather-icon").unbind("click");
 	});
 
 });
