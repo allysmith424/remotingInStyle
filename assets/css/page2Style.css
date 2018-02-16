@@ -281,26 +281,11 @@ input{
 	height: 92%;
 }
 
-#back-to-index-button {
-	display: block;
-	border: none;
-	background: rgba(0, 0, 0, 0);
-	font-size: 15px;
-}
-
-#back-to-index-button a {
-	color: #777;
-}
-
-#back-to-index-button a:hover {
-	color: #ff3845;
-}
-
 #weather-image{
 	width: 50px;
 	position: relative;
-	top: 1vh;
 	left: 1vw;
+	top: .8vh;
 	margin-right: 1vw;
 	display: table-cell;
 }
@@ -370,9 +355,9 @@ input{
 .next-btn{
 	position: absolute;
 	top: 80%;
-	left: 80%;
-	padding-left: 1.2vw;
-	padding-right: 1.2vw;
+	left: 82%;
+	padding-left: 1.4vw;
+	padding-right: 1.4vw;
 }
 
 .button:hover{
@@ -397,11 +382,6 @@ input{
 	margin-bottom: 3vh;
 	margin-right: 2.5vw;
 	margin-left: 2.5vw;
-}
-
-#event-listings p{
-	text-align: center;
-	font-size: 2.5vw;
 }
 
 #event-listings a{
@@ -448,7 +428,7 @@ input{
 }
 
 #page-navigation img{
-	width: 2.3vw;
+	width: 35px;
 	height: auto;
 }
 
@@ -491,7 +471,7 @@ input{
 .hotel-info {
 	position: absolute;
 	top: 27%;
-	left: 35%;
+	left: 40%;
 	font-family: "Nunito";
 	line-height: 1.5;
 	font-size: 2vw;
@@ -500,7 +480,7 @@ input{
 .rateYo-hotel{
 	position: absolute;
 	top: 79%;
-	left: 73%;
+	left: 70%;
 }
 
 @media(max-width: 1075px) {
