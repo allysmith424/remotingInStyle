@@ -287,6 +287,12 @@ var cities = [
 		"longitude": "-43.172896"
 	},
 	{
+		"name": "San Francisco",
+		"country": "USA",
+		"latitude": "37.77",
+		"longitude": "122.42"
+	},
+	{
 		"name": "Seoul",
 		"country": "South Korea",
 		"latitude": "37.34",
@@ -325,9 +331,11 @@ function checkWeatherChosen() {
 		$(".title-screen").addClass("display-none");
 		desiredWeather = sessionStorage.getItem("weather");
 		if (desiredWeather === "sunny") {
+			desiredWeather = "clear-day";
 			desiredTemp = "hot";
 		}
 		else if (desiredWeather === "temperate") {
+			desiredWeather = "clear-day";
 			desiredTemp = "cold";
 		}
 
@@ -357,7 +365,8 @@ function matchWeatherType() {
 
 		weatherQuery(name, latitude, longitude);
 
-	};	
+	};
+
 };
 
 function weatherQuery(name, latitude, longitude) {
@@ -393,13 +402,67 @@ function addToPage() {
 
 	for (var i = 0; i < matchingCities.length; i++) {
 
-		potentialCity = $("<a>");
+		var potentialCity = $("<a>");
 
 		potentialCity.addClass("pure-button").attr("href","page2Index.html").text(matchingCities[i]).attr("data-name", matchingCities[i]);
 
 		$(".city-button").append(potentialCity);
 
 	};
+
+};
+
+var moveToCityButtons = function() {
+		
+	$(".weather-icon").unbind("click");
+
+	matchingCities = [];
+
+	var thisIcon = $(this);
+
+	desiredWeather = $(this).attr("data-weather");
+
+	desiredTemp = $(this).attr("data-temp");
+
+	var id = $(this).attr("id");
+
+	if(desiredWeather === "snow")
+		$("#selection-notification").text("YOU HAVE SELECTED SNOW!");
+	else if(desiredWeather === "clear-day" && desiredTemp === "hot")
+		$("#selection-notification").text("YOU HAVE SELECTED SUNNY");
+	else if(desiredWeather === "clear-day" && desiredTemp === "cold")
+		$("#selection-notification").text("YOU HAVE SELECTED OVERCAST!");
+	else
+		$("#selection-notification").text("YOU HAVE SELECTED RAINY!");
+
+	setTimeout(function(){
+		
+		matchWeatherType();
+		
+		$(document).ajaxStop(function() {
+
+			$(".city-button").empty();
+
+			$(".weather-screen").addClass("display-none");
+
+			$(".button-screen").removeClass("display-none");
+
+			addToPage();
+
+		});
+
+		sessionStorage.clear();
+
+		if (desiredWeather === "snow" || desiredWeather === "rain") {
+			sessionStorage.setItem("weather", thisIcon.attr("data-weather"));
+		}
+		else if (desiredWeather === "clear-day" && desiredTemp === "hot") {
+			sessionStorage.setItem("weather", "sunny");
+		}
+		else if (desiredWeather === "clear-day" && desiredTemp === "cold") {
+			sessionStorage.setItem("weather", "temperate");
+		}
+	}, 3000);
 
 };
 
@@ -415,63 +478,7 @@ $(document).ready(function() {
 
 	});
 
-
-	$(document).on("click", ".weather-icon", function() {
-
-		$(".weather-icon").unbind("click");
-		
-		matchingCities = [];
-
-		var thisIcon = $(this);
-
-		desiredWeather = $(this).attr("data-weather");
-
-		desiredTemp = $(this).attr("data-temp");
-
-		var id = $(this).attr("id");
-
-		if(desiredWeather === "snow")
-			$("#selection-notification").text("YOU HAVE SELECTED SNOW!");
-		else if(desiredWeather === "clear-day" && desiredTemp === "hot")
-			$("#selection-notification").text("YOU HAVE SELECTED SUNNY");
-		else if(desiredWeather === "clear-day" && desiredTemp === "cold")
-			$("#selection-notification").text("YOU HAVE SELECTED OVERCAST!");
-		else
-			$("#selection-notification").text("YOU HAVE SELECTED RAINY!");
-
-			$(".city-button").empty();
-
-			$(".weather-screen").addClass("display-none");
-
-		setTimeout(function(){
-			matchWeatherType();
-
-			$(document).ajaxStop(function() {
-
-				$(".city-button").empty();
-
-				$(".weather-screen").addClass("display-none");
-
-				$(".button-screen").removeClass("display-none");
-
-				addToPage();
-
-			});
-
-			sessionStorage.clear();
-
-			if (desiredWeather === "snow" || desiredWeather === "rain") {
-				sessionStorage.setItem("weather", thisIcon.attr("data-weather"));
-			}
-			else if (desiredWeather === "clear-day" && desiredTemp === "hot") {
-				sessionStorage.setItem("weather", "sunny");
-			}
-			else if (desiredWeather === "clear-day" && desiredTemp === "cold") {
-				sessionStorage.setItem("weather", "temperate");
-			}
-		}, 3000);
-
-	});
+	$(".weather-icon").on("click", moveToCityButtons);
 
 	$(document).on("click", ".pure-button", function() {
 
@@ -490,14 +497,9 @@ $(document).ready(function() {
 	});
 
 	$(document).on("click", "#back-to-weather", function() {
+		$(".weather-icon").bind("click", moveToCityButtons);
 		$("#selection-notification").empty();
 		$(".button-screen").addClass("display-none");
 		$(".weather-screen").removeClass("display-none");
-		$(".weather-icon").unbind("click");
 	});
-
 });
-
-
-
-

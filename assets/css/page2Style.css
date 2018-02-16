@@ -210,7 +210,8 @@ input{
 }
 
 .temp-low {
-	color: #fff;
+	color: #8cbdff;
+	text-shadow: .02rem .02rem black;
 }
 
 .display-none{
@@ -265,7 +266,8 @@ input{
 }
 
 .transparent-background{
-	background: rgba(209, 209, 209, .8);
+	background: rgba(135, 145, 145, .90);
+	border-radius: 1.2rem;
 }
 
 #main-content{
@@ -354,7 +356,7 @@ input{
 
 .next-btn{
 	position: absolute;
-	top: 80%;
+	top: 85%;
 	left: 82%;
 	padding-left: 1.4vw;
 	padding-right: 1.4vw;
@@ -479,7 +481,7 @@ input{
 
 .rateYo-hotel{
 	position: absolute;
-	top: 79%;
+	top: 84%;
 	left: 70%;
 }
 
@@ -584,10 +586,6 @@ input{
 
 	h1{
 		font-size: 40px;
-	}
-
-	#back-to-index-button {
-		font-size: 10px;
 	}
 
 	h4{
