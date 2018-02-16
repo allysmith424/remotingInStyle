@@ -420,6 +420,8 @@ $(document).ready(function() {
 		
 		matchingCities = [];
 
+		var thisIcon = $(this);
+
 		desiredWeather = $(this).attr("data-weather");
 
 		desiredTemp = $(this).attr("data-temp");
@@ -452,13 +454,13 @@ $(document).ready(function() {
 
 			sessionStorage.clear();
 
-			if ($(this).attr("data-weather") === "snow" || "rain") {
-				sessionStorage.setItem("weather", $(this).attr("data-weather"));
+			if (desiredWeather === "snow" || desiredWeather === "rain") {
+				sessionStorage.setItem("weather", thisIcon.attr("data-weather"));
 			}
-			else if ($(this).attr("data-weather") === "clear-day" && $(this).attr("data-temp") === "hot") {
+			else if (desiredWeather === "clear-day" && desiredTemp === "hot") {
 				sessionStorage.setItem("weather", "sunny");
 			}
-			else if ($(this).attr("data-weather") === "clear-day" && $(this).attr("data-temp") === "cold") {
+			else if (desiredWeather === "clear-day" && desiredTemp === "cold") {
 				sessionStorage.setItem("weather", "temperate");
 			}
 		}, 3000);
