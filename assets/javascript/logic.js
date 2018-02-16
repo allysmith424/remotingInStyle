@@ -436,8 +436,9 @@ var moveToCityButtons = function() {
 		$("#selection-notification").text("YOU HAVE SELECTED RAINY!");
 
 	setTimeout(function(){
+		
 		matchWeatherType();
-
+		
 		$(document).ajaxStop(function() {
 
 			$(".city-button").empty();
@@ -502,7 +503,3 @@ $(document).ready(function() {
 		$(".weather-screen").removeClass("display-none");
 	});
 });
-
-
-
-
