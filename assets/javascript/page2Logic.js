@@ -35,7 +35,7 @@ var enddd = sevenDaysFromToday.getDate();
 var endyy = sevenDaysFromToday.getFullYear();
 var end = endmm + "/" + enddd + "/" + endyy;
 
-//eventfulAPIKey
+//eventfulAPIKey and googleMapsKey
 var eventfulKey = "6MjJmgvxws8Mw9hz";
 var googleMapsKey = "AIzaSyC4wHmmK9UQ73Dt3GhziiwysbQdSS-5cSE";
 
@@ -298,9 +298,9 @@ function parseEventForm(){
 		else if (verifyDateOrder(startDate, endDate) === false)
 			$("#validation").text("Start date must be on or before end date");
 		else if (userAddress !== "" && maximumDistance === "")
-			$("#validation").text("Must enter a maximum distance if address is entered");
+			$("#validation").text("Must include a maximum distance if address is entered");
 		else if (maximumDistance !== "" && userAddress === "")
-			$("#validation").text("Must enter an address if maximum distance is entered");
+			$("#validation").text("Must include an address if maximum distance is entered");
 		else if(isNaN(maximumDistance) === true || parseInt(maximumDistance) <= 0)
 			$("#validation").text("Enter a numeric maximum distance greater than zero");
 		else {
@@ -716,14 +716,16 @@ $(document).ready(function() {
 	});
 
 	$("#weather-image").on("click", function() {
-			changingTab = 1;
-			sessionStorage.setItem("Weather chosen", "false");
-		});
+		$("#weather-image").unbind("click");
+		changingTab = 1;
+		sessionStorage.setItem("Weather chosen", "false");
+	});
 
 	$("#city-name").on("click", function() {
-			changingTab = 1;
-			sessionStorage.setItem("Weather chosen", "true");
-		});
+		$("#city-name").unbind("click");
+		changingTab = 1;
+		sessionStorage.setItem("Weather chosen", "true");
+	});
 
 	firebase.auth().onAuthStateChanged(function(firebaseUser){
 		if(changingTab === 1)
