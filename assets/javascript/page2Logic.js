@@ -715,11 +715,6 @@ $(document).ready(function() {
 		firebase.auth().signOut();
 	});
 
-	$("#back-to-index-button").on("click", function() {
-		sessionStorage.setItem("Weather chosen", "false");
-		changingTab = 1;
-	});
-
 	$("#weather-image").on("click", function() {
 			changingTab = 1;
 			sessionStorage.setItem("Weather chosen", "false");
