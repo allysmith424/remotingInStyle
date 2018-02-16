@@ -24,36 +24,36 @@ var cities = [
 		"latitude": "30.287144",
 		"longitude": "-97.728885"
 	},
-	// {
-	// 	"name": "Baltimore",
-	// 	"latitude": "39.2904",
-	// 	"longitude": "-76.6122"
-	// },
-	// {
-	// 	"name": "Bangkok",
-	// 	"latitude": "13.7563",
-	// 	"longitude": "100.5018"
-	// },
-	// {
-	// 	"name": "Barcelona",
-	// 	"latitude": "41.3851",
-	// 	"longitude": "2.1734"
-	// },
-	// {
-	// 	"name": "Beijing",
-	// 	"latitude": "39.9042",
-	// 	"longitude": "116.407396"
-	// },
-	// {
-	// 	"name": "Berlin",
-	// 	"latitude": "52.5200",
-	// 	"longitude": "13.4050"
-	// },
-	// {
-	// 	"name": "Bern",
-	// 	"latitude": "46.9480",
-	// 	"longitude": "7.4474"
-	// },
+	{
+		"name": "Baltimore",
+		"latitude": "39.2904",
+		"longitude": "-76.6122"
+	},
+	{
+		"name": "Bangkok",
+		"latitude": "13.7563",
+		"longitude": "100.5018"
+	},
+	{
+		"name": "Barcelona",
+		"latitude": "41.3851",
+		"longitude": "2.1734"
+	},
+	{
+		"name": "Beijing",
+		"latitude": "39.9042",
+		"longitude": "116.407396"
+	},
+	{
+		"name": "Berlin",
+		"latitude": "52.5200",
+		"longitude": "13.4050"
+	},
+	{
+		"name": "Bern",
+		"latitude": "46.9480",
+		"longitude": "7.4474"
+	},
 	// {
 	// 	"name": "Boston",
 	// 	"latitude": "42.3601",
@@ -313,8 +313,6 @@ function checkWeatherChosen() {
 
 	var weatherChosen = sessionStorage.getItem("Weather chosen");
 
-	console.log("Weather chosen: " + weatherChosen);
-
 	if (weatherChosen === null) {
 		sessionStorage.clear();
 		return;
@@ -397,7 +395,7 @@ function addToPage() {
 
 		potentialCity = $("<a>");
 
-		potentialCity.addClass("pure-button").attr("id", "button").attr("href","page2Index.html").text(matchingCities[i]).attr("data-name", matchingCities[i]);
+		potentialCity.addClass("pure-button").attr("href","page2Index.html").text(matchingCities[i]).attr("data-name", matchingCities[i]);
 
 		$(".city-button").append(potentialCity);
 
@@ -418,9 +416,7 @@ $(document).ready(function() {
 	});
 
 
-	$(".weather-icon").on("click", function() {
-
-		$(".weather-icon").unbind("click");
+	$(document).on("click", ".weather-icon", function() {
 		
 		matchingCities = [];
 
@@ -428,29 +424,44 @@ $(document).ready(function() {
 
 		desiredTemp = $(this).attr("data-temp");
 
-		matchWeatherType();
+		var id = $(this).attr("id");
 
-		$(document).ajaxStop(function() {
+		if(desiredWeather === "snow")
+			$("#selection-notification").text("YOU HAVE SELECTED SNOW!");
+		else if(desiredWeather === "clear-day" && desiredTemp === "hot")
+			$("#selection-notification").text("YOU HAVE SELECTED SUNNY");
+		else if(desiredWeather === "clear-day" && desiredTemp === "cold")
+			$("#selection-notification").text("YOU HAVE SELECTED OVERCAST!");
+		else
+			$("#selection-notification").text("YOU HAVE SELECTED RAINY!");
 
-			$(".weather-screen").addClass("display-none");
+		setTimeout(function(){
+			matchWeatherType();
 
-			$(".button-screen").removeClass("display-none");
+			$(document).ajaxStop(function() {
 
-			addToPage();
+				$(".city-button").empty();
 
-		});
+				$(".weather-screen").addClass("display-none");
 
-		sessionStorage.clear();
+				$(".button-screen").removeClass("display-none");
 
-		if ($(this).attr("data-weather") === "snow" || "rain") {
-			sessionStorage.setItem("weather", $(this).attr("data-weather"));
-		}
-		else if ($(this).attr("data-weather") === "clear-day" && $(this).attr("data-temp") === "hot") {
-			sessionStorage.setItem("weather", "sunny");
-		}
-		else if ($(this).attr("data-weather") === "clear-day" && $(this).attr("data-temp") === "cold") {
-			sessionStorage.setItem("weather", "temperate");
-		}
+				addToPage();
+
+			});
+
+			sessionStorage.clear();
+
+			if ($(this).attr("data-weather") === "snow" || "rain") {
+				sessionStorage.setItem("weather", $(this).attr("data-weather"));
+			}
+			else if ($(this).attr("data-weather") === "clear-day" && $(this).attr("data-temp") === "hot") {
+				sessionStorage.setItem("weather", "sunny");
+			}
+			else if ($(this).attr("data-weather") === "clear-day" && $(this).attr("data-temp") === "cold") {
+				sessionStorage.setItem("weather", "temperate");
+			}
+		}, 3000);
 
 	});
 
@@ -470,7 +481,8 @@ $(document).ready(function() {
 
 	});
 
-	$("#back-to-weather").on("click", function() {
+	$(document).on("click", "#back-to-weather", function() {
+		$("#selection-notification").empty();
 		$(".button-screen").addClass("display-none");
 		$(".weather-screen").removeClass("display-none");
 	});
